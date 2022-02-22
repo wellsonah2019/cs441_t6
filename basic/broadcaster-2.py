@@ -32,7 +32,7 @@ while (client2 == None or client3 == None):
 arp_table_socket = {client2_ip : client2, client3_ip : client3}
 print(arp_table_socket)
 arp_table_mac = {client2_ip : client2_mac, client3_ip : client3_mac}
-router.listen(5)
+router.listen(100)
 while True:
     conn, addr = router.accept()
     print(conn)

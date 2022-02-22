@@ -7,7 +7,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 LOCAL_ARP_TABLE = {
     "0x21": "R2",
-    "0x2B": "N3"
+    "0x2A": "N2"
 }
 def send_local(conn, packet):
     conn.send(bytes(packet, "utf-8"))

@@ -30,6 +30,7 @@ while (client2 == None or client3 == None):
         client3 = client
         print("Client 3 is online")
 arp_table_socket = {client2_ip : client2, client3_ip : client3}
+print(arp_table_socket)
 arp_table_mac = {client2_ip : client2_mac, client3_ip : client3_mac}
 router.listen(5)
 while True:

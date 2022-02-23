@@ -1,3 +1,4 @@
+# coding=utf-8
 from host import host
 from master import master
 import matplotlib as plt

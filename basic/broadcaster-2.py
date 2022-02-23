@@ -17,7 +17,7 @@ client2_ip = "0x2A" # Change these 4 values
 client2_mac = "N2"
 client3_ip = "0x2B"
 client3_mac = "N3"
-router_send.listen(4)
+router_send.listen(100)
 client2 = None
 client3 = None
 while (client2 == None or client3 == None):

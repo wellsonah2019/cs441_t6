@@ -2,15 +2,15 @@ import socket
 
 IP = '0x2B'
 MAC = 'N3'
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
 LOCAL_ARP_TABLE = {
     "0x21": "R2",
     "0x2A": "N2"
 }
-def send_local(conn, packet):
-    conn.send(bytes(packet, "utf-8"))
+def send_local(packet):
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8100))
 
 def send_out(packet):
     pass
@@ -28,14 +28,13 @@ def wrap_packet_ip(message, dest_ip):
     
     return packet
 
-server.connect(("localhost", 8100))
 
 while True:
     message = input("Please insert the message you want to send: ")
     dest_ip = input("Please insert the destination: ")
     
     if dest_ip[2] == '2':
-        send_local(server, wrap_packet_ip(message, dest_ip))
+        send_local(wrap_packet_ip(message, dest_ip))
     else:
-        send_out(server, wrap_packet_ip(message, dest_ip))
+        send_out()
     

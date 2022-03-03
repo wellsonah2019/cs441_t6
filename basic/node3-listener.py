@@ -3,11 +3,11 @@ import socket
 IP = '0x2B'
 MAC = 'N3'
 
-router = ("localhost", 8200) 
-node3 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-node3.connect(router)
+cable = ("localhost", 8200) 
+node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+node3.bind(("localhost", 8003))
 while True:
-    received_message = node3.recv(1024)
+    received_message, address = node3.recvfrom(1024)
     if received_message:
         received_message = received_message.decode("utf-8")
         source_mac = received_message[0:2]

@@ -3,11 +3,10 @@ import socket
 IP = '0x1A'
 MAC = 'N1'
 
-router = ("localhost", 8200) 
-node1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-node1.connect(router)
+node1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+node1.bind(("localhost", 8001))
 while True:
-    received_message = node1.recv(1024)
+    received_message, addr = node1.recvfrom(1024)
     received_message = received_message.decode("utf-8")
     source_mac = received_message[0:2]
     destination_mac = received_message[2:4]

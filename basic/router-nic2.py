@@ -36,6 +36,7 @@ while True:
         print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
         print("\nMessage: " + message)
     elif destination_ip in connected_to_me:
+        received_message = received_message[0:2] + str(connected_to_me[destination_ip]) + received_message[4:]
         print("Packet received for a node in my network")
         if source_ip[2] != '2':
             print('received from outside network -- will pass to cable')

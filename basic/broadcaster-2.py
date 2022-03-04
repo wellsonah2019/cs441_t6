@@ -32,7 +32,7 @@ while router1 == None:
     print("Router 2 is online")
 
 arp_table_socket = {client2_ip : client2, client3_ip : client3, router1_ip: router1}
-print(arp_table_socket)
+print(arp_table_so~cket)
 
 while True:
     data, address = router.recvfrom(4096)

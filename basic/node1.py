@@ -27,7 +27,7 @@ def wrap_packet_ip(message, dest_ip):
     if dest_ip in LOCAL_ARP_TABLE:
         destination_mac = LOCAL_ARP_TABLE[dest_ip] 
     else:
-        destination_mac = 'N2'
+        destination_mac = 'R1'
     ethernet_header = ethernet_header + source_mac + destination_mac
     packet = ethernet_header + IP_header + message
     

@@ -10,7 +10,9 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2"
 }
 def send_local(packet):
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8100))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
 
 def send_out(packet):
     pass

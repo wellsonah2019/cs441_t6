@@ -1,6 +1,10 @@
 import socket
 import sys 
+import subprocess as sp
 
+extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
+
+status = sp.Popen.poll(extProc) # status should be 'None'
 IP = '0x2A'
 MAC = 'N2'
 
@@ -36,6 +40,7 @@ while True:
             log_protocol(source_ip, source_mac, message)
         elif protocol == 2:
             print("Kill protocol has been given. Will exit now...")
+            sp.Popen.terminate(extProc)
             sys.exit()
     else:
         print("Packet received, but it ain't for u.")

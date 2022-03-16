@@ -17,6 +17,7 @@ other_router = {
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
 
 router1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 router1.bind(("localhost", 8102))
@@ -38,6 +39,8 @@ while True:
     data_length = received_message[13:16]
     protocol = int(protocol)
     message = received_message[16:]
+    print(destination_mac)
+    print(destination_ip)
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -61,6 +64,11 @@ while True:
             print("But received locally -- therefore will not send")
     elif destination_ip[2] == '1':
         print("Packet received for destination outside network... \n Forwarding to router-nic1...")
+        received_message = [char for char in received_message]
+        received_message[2] = 'R'
+        received_message[3] = '1'
+        received_message = ''.join(received_message)
+        print(received_message)
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
     else:
         print("Packet received but it ain't for you")

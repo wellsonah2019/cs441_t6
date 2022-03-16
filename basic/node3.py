@@ -11,8 +11,8 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2"
 }
 FIREWALL_RULE_N3 = {
-    "allow": "[0x1A,0x2A]",
-    "deny": "[]"
+    "allow": [],
+    "deny": ["0x1A"]
 }
 
 def send_local(packet):

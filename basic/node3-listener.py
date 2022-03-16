@@ -8,7 +8,7 @@ IP = '0x2B'
 MAC = 'N3'
 
 FIREWALL_RULE_N3 = {
-    "allow": ["0x1A","0x2A"],
+    "allow": [],
     "deny": []
 }
 
@@ -33,9 +33,10 @@ while True:
         message = received_message[16:]
         protocol = int(protocol)
 
-        if 
-
-        if IP == destination_ip and MAC == destination_mac:
+        # NOTE: FIREWALL
+        if source_ip in FIREWALL_RULE_N3["deny"]:
+            print("Packet from {} blocked due to firewall rule.".format(source_ip))
+        elif IP == destination_ip and MAC == destination_mac:
             if protocol == 3:
                 print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))

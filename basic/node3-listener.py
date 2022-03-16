@@ -7,6 +7,11 @@ extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py
 IP = '0x2B'
 MAC = 'N3'
 
+FIREWALL_RULE_N3 = {
+    "allow": ["0x1A","0x2A"],
+    "deny": []
+}
+
 cable = ("localhost", 8200) 
 node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 node3.bind(("localhost", 8003))
@@ -27,6 +32,9 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
+
+        if 
+
         if IP == destination_ip and MAC == destination_mac:
             if protocol == 3:
                 print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))

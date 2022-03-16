@@ -19,7 +19,7 @@ node1.bind(("localhost", 8001))
 def log_protocol(source_ip, source_mac, message):
     with open('node1.log', 'a') as file:
         file.write("\nSOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
- 
+
 while True:
     received_message, addr = node1.recvfrom(1024)
     received_message = received_message.decode("utf-8")

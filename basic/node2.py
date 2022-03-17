@@ -11,11 +11,17 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2",
     "0x2B": "N3"
 }
+
+FIREWALL_RULE_N2 = {
+    "allow": "[0x1A,0x2B]",
+    "deny": "[]"
+}
+
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
-
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
 
 def wrap_packet_ip(message, dest_ip, protocol):
     ethernet_header = ""

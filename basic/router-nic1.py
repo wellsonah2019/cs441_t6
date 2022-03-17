@@ -39,6 +39,8 @@ while True:
     data_length = received_message[13:16]
     protocol = int(protocol)
     message = received_message[16:]
+    print(destination_mac)
+    print(destination_ip)
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -69,6 +71,11 @@ while True:
             print("But received locally -- therefore will not send")
     elif destination_ip[2] == '2':
         print("Packet received for destination outside network... \n Forwarding to router-nic2...")
+        received_message = [char for char in received_message]
+        received_message[2] = 'R'
+        received_message[3] = '2'
+        received_message = ''.join(received_message)
+        print(received_message)
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8102))
     else:
         print("Packet received but it aint for you")

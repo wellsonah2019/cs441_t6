@@ -10,11 +10,17 @@ LOCAL_ARP_TABLE = {
     "0x21": "R2",
     "0x2A": "N2"
 }
+FIREWALL_RULE_N3 = {
+    "allow": [],
+    "deny": ["0x1A"]
+}
+
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
-
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
+    
 def send_out(packet):
     pass
 

@@ -12,6 +12,11 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2"
 }
 
+FIREWALL_RULE_N3 = {
+    "allow": [],
+    "deny": []
+}
+
 cable = ("localhost", 8200) 
 node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 node3.bind(("localhost", 8003))
@@ -61,7 +66,11 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
-        if IP == destination_ip and MAC == destination_mac:
+
+        # NOTE: FIREWALL
+        if source_ip in FIREWALL_RULE_N3["deny"]:
+            print("Packet from {} blocked due to firewall rule.".format(source_ip))
+        elif IP == destination_ip and MAC == destination_mac:
             if protocol == 3:
                 print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(source_ip=ip_source, destination_ip=destination_ip))

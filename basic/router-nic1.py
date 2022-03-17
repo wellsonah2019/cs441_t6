@@ -16,6 +16,9 @@ other_router = {
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8001))
 
+def reply_ping(packet):
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8011))
+
 def log_protocol(source_ip, source_mac, message):
     with open('node2.log', 'a') as file:
         file.write("SOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
@@ -52,8 +55,16 @@ while True:
     elif destination_ip in connected_to_me:
         received_message = received_message[0:2] + str(connected_to_me[destination_ip]) + received_message[4:]
         if source_ip[2] != '1':
-            print('received from outside network -- will pass to cable')
-            send_local(received_message)
+            if protocol == 0:
+                if received_message[-1] == 'r':
+                    reply_ping(received_message)
+                else:
+                    send_local(received_message)
+            else:
+                print('received from outside network -- will pass to cable')
+                send_local(received_message)
+            # print('received from outside network -- will pass to cable')
+            # send_local(received_message)
         else:
             print("But received locally -- therefore will not send")
     elif destination_ip[2] == '2':

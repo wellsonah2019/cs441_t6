@@ -18,6 +18,10 @@ def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
 
+def reply_ping(packet):
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8022))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8033))
+
 router1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 router1.bind(("localhost", 8102))
 
@@ -55,8 +59,17 @@ while True:
         received_message = received_message[0:2] + str(connected_to_me[destination_ip]) + received_message[4:]
         print("Packet received for a node in my network")
         if source_ip[2] != '2':
-            print('received from outside network -- will pass to cable')
-            send_local(received_message)
+            if protocol == 0:
+                if received_message[-1] == 'r':
+                    reply_ping(received_message)
+                else:
+                    send_local(received_message)
+            else:
+                print('received from outside network -- will pass to cable')
+                send_local(received_message)
+            
+            # print('received from outside network -- will pass to cable')
+            # send_local(received_message)
         else:
             print("But received locally -- therefore will not send")
     elif destination_ip[2] == '1':

@@ -4,7 +4,7 @@ from datetime import datetime
 IP = '0x2B'
 MAC = 'N3'
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
+server.bind(("localhost", 8033))
 
 LOCAL_ARP_TABLE = {
     "0x21": "R2",
@@ -55,7 +55,22 @@ while True:
             message = input("Please insert the message you want to send: ")
         send_local(wrap_packet_ip(message, dest_ip, protocol))
     elif protocol == str(0):
-        pass # send ping here
+        # print("SEND LOCAL PING")
+        send_local(wrap_packet_ip("PING", dest_ip, protocol))
+        server.settimeout(10)
+        ip_source = ""
+        try:
+            # print("RECEIVING REPLY")
+            received_message, addr = server.recvfrom(1024)
+            received_message = received_message.decode("utf-8")
+            ip_source = received_message[4:8]
+            destination_ip =  received_message[8:12]
+            message = received_message[16:]
+            if IP == destination_ip:
+                print('Reply from ' + ip_source)
+                print(message[:-1])
+        except socket.timeout as e:
+            print(e)
 
     elif protocol == str(1):
         log_message = input("Please insert the log details: ")

@@ -23,10 +23,10 @@ def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
 
-def wrap_packet_ip(message, dest_ip, protocol):
+def wrap_packet_ip(message, dest_ip, protocol, source_ip = IP):
     ethernet_header = ""
     IP_header = ""
-    source_ip = IP
+    source_ip = source_ip
     IP_header = IP_header + source_ip + dest_ip
     source_mac = MAC
     protocol = protocol
@@ -54,6 +54,7 @@ while True:
     dest_ip = input("Please insert the destination: ")
     if protocol == str(3):
         message = input("Please insert the message you want to send: ")
+        source_ip = input("[Evil mode] Please insert the source IP to spoof: ")
         while len(message) > 256:
             print()
             print("Message is too long")

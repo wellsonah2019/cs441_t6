@@ -78,6 +78,7 @@ while True:
                 print(message[:-1])
         except socket.timeout as e:
             print(e)
+            print()
 
     elif protocol == str(1):
         log_message = input("Please insert the log details: ")

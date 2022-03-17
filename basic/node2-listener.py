@@ -65,7 +65,7 @@ while True:
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
-            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(source_ip=ip_source, destination_ip=destination_ip))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)
         elif protocol == 0:
@@ -78,4 +78,5 @@ while True:
             sp.Popen.terminate(extProc)
             sys.exit()
     else:
-        print("Packet received, but it ain't for u.")
+        if protocol != 0:
+            print("Packet received, but it ain't for u.")

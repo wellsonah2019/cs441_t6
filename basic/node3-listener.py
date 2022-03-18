@@ -14,7 +14,7 @@ LOCAL_ARP_TABLE = {
 
 FIREWALL_RULE_N3 = {
     "allow": [],
-    "deny": ['0x1A']
+    "deny": []
 }
 
 cable = ("localhost", 8200) 

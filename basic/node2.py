@@ -72,6 +72,7 @@ while True:
             if IP == destination_ip:
                 print('Reply from ' + ip_source)
                 print(message[:-1])
+                server.settimeout(None)
         except socket.timeout as e:
             print(e)
             print()

@@ -4,7 +4,6 @@ from datetime import datetime
 IP = '0x2A'
 MAC = 'N2'
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server.bind(("localhost", 8022))
 
 LOCAL_ARP_TABLE = {
     "0x21": "R2",

@@ -12,7 +12,7 @@ LOCAL_ARP_TABLE = {
 }
 FIREWALL_RULE_N3 = {
     "allow": [],
-    "deny": ["0x1A"]
+    "deny": []
 }
 
 def send_local(packet):
@@ -75,6 +75,7 @@ while True:
             if IP == destination_ip:
                 print('Reply from ' + ip_source)
                 print(message[:-1])
+                server.settimeout(None)
         except socket.timeout as e:
             print(e)
             print()

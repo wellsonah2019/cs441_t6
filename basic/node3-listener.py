@@ -1,6 +1,8 @@
 import socket
 import sys
 import subprocess as sp
+from firewall import FIREWALL_RULE_N3
+
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
@@ -12,10 +14,10 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2"
 }
 
-FIREWALL_RULE_N3 = {
-    "allow": [],
-    "deny": []
-}
+# FIREWALL_RULE_N3 = {
+#     "allow": [],
+#     "deny": []
+# }
 
 cable = ("localhost", 8200) 
 node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -66,7 +68,8 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
-
+        # debug
+        print("message received")
         # NOTE: FIREWALL
         if ip_source in FIREWALL_RULE_N3["deny"]:
             print("Packet from {} blocked due to firewall rule.".format(ip_source))

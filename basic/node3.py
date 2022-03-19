@@ -1,5 +1,6 @@
 import socket
 from datetime import datetime
+from firewall import FIREWALL_RULE_N3
 
 IP = '0x2B'
 MAC = 'N3'
@@ -9,10 +10,6 @@ server.bind(("localhost", 8033))
 LOCAL_ARP_TABLE = {
     "0x21": "R2",
     "0x2A": "N2"
-}
-FIREWALL_RULE_N3 = {
-    "allow": [],
-    "deny": []
 }
 
 def send_local(packet):
@@ -50,41 +47,52 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n")
-    dest_ip = input("Please insert the destination: ")
-    if protocol == str(3):
-        message = input("Please insert the message you want to send: ")
-        while len(message) > 256:
-            print()
-            print("Message is too long")
+    protocol = input("Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n 4. Configure firewall \n")
+#   NOTE: firewall config
+    if protocol == str(4):
+        print("Current firewall configuration: ")
+        print("Blocked IPs: {}".format(FIREWALL_RULE_N3["deny"]))
+        ip_to_block = input("Please enter the IP address to be blocked: ")
+        if ip_to_block not in FIREWALL_RULE_N3["deny"]:
+            FIREWALL_RULE_N3["deny"].append(ip_to_block)
+            print("{} is now blocked!".format(ip_to_block))
+        else:
+            print("{} is already blocked!".format(ip_to_block))
+    else:
+        dest_ip = input("Please insert the destination: ")
+        if protocol == str(3):
             message = input("Please insert the message you want to send: ")
-        send_local(wrap_packet_ip(message, dest_ip, protocol))
-    elif protocol == str(0):
-        # print("SEND LOCAL PING")
-        send_local(wrap_packet_ip("PING", dest_ip, protocol))
-        server.settimeout(10)
-        ip_source = ""
-        try:
-            # print("RECEIVING REPLY")
-            received_message, addr = server.recvfrom(1024)
-            received_message = received_message.decode("utf-8")
-            ip_source = received_message[4:8]
-            destination_ip =  received_message[8:12]
-            message = received_message[16:]
-            if IP == destination_ip:
-                print('Reply from ' + ip_source)
-                print(message[:-1])
-                server.settimeout(None)
-        except socket.timeout as e:
-            print(e)
-            print()
+            while len(message) > 256:
+                print()
+                print("Message is too long")
+                message = input("Please insert the message you want to send: ")
+            send_local(wrap_packet_ip(message, dest_ip, protocol))
+        elif protocol == str(0):
+            # print("SEND LOCAL PING")
+            send_local(wrap_packet_ip("PING", dest_ip, protocol))
+            server.settimeout(10)
+            ip_source = ""
+            try:
+                # print("RECEIVING REPLY")
+                received_message, addr = server.recvfrom(1024)
+                received_message = received_message.decode("utf-8")
+                ip_source = received_message[4:8]
+                destination_ip =  received_message[8:12]
+                message = received_message[16:]
+                if IP == destination_ip:
+                    print('Reply from ' + ip_source)
+                    print(message[:-1])
+                    server.settimeout(None)
+            except socket.timeout as e:
+                print(e)
+                print()
 
-    elif protocol == str(1):
-        log_message = input("Please insert the log details: ")
-        log_message = str(datetime.now()) + " " + log_message
-        send_local(wrap_packet_ip(log_message, dest_ip, protocol))
+        elif protocol == str(1):
+            log_message = input("Please insert the log details: ")
+            log_message = str(datetime.now()) + " " + log_message
+            send_local(wrap_packet_ip(log_message, dest_ip, protocol))
 
-    else: 
-        message = ''
-        send_local(wrap_packet_ip(message, dest_ip, protocol))
+        else: 
+            message = ''
+            send_local(wrap_packet_ip(message, dest_ip, protocol))
     

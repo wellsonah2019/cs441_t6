@@ -61,7 +61,6 @@ while True:
     destination_ip =  received_message[8:12]
     protocol = received_message[12:13]
     data_length = received_message[13:16]
-    # print(data_length)
     message = received_message[16:]
     protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:

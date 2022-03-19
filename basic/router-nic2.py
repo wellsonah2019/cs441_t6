@@ -27,8 +27,32 @@ router1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 router1.bind(("localhost", 8102))
 
 def log_protocol(source_ip, source_mac, message):
-    with open('node2.log', 'a') as file:
+    with open('router-nic2.log', 'a') as file:
         file.write("SOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
+
+def wrap_packet_ip(message, dest_ip, protocol):
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message + 'r'
+    data_length = str(len(message))
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in connected_to_me:
+        destination_mac = connected_to_me[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + protocol + data_length + data
+    
+    return packet
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 print('yes here')
@@ -60,15 +84,23 @@ while True:
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)
         elif protocol == 0:
-            pass # insert ping function here
+            print("RECEVIED PING REQUEST... \nREPLYING NOW...")
+            if source_ip[2] == '2':
+                reply_ping(wrap_packet_ip(message, source_ip, str(protocol)))
+            else:
+                server.sendto(bytes(wrap_packet_ip(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8101))
         elif protocol == 1:
             log_protocol(source_ip, source_mac, message)
         elif protocol == 2:
             print("Kill protocol has been given. Will exit now...")
             sys.exit()
     elif destination_ip in connected_to_me:
-        received_message = received_message[0:2] + str(connected_to_me[destination_ip]) + received_message[4:]
-        print("Packet received for a node in my network")
+        print("Packet received for destination current network... \nForwading to current network...")
+        print("CURRENT SOURCE MAC ADDRESS:", source_mac)
+        print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
+        print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
+        print("CHANGING MAC ADDRESS TO {}...".format(connected_to_me[destination_ip]))
+        received_message = MAC + str(connected_to_me[destination_ip]) + received_message[4:]
         if source_ip[2] != '2':
             if protocol == 0:
                 if received_message[-1] == 'r':
@@ -76,20 +108,23 @@ while True:
                 else:
                     send_local(received_message)
             else:
-                print('received from outside network -- will pass to cable')
                 send_local(received_message)
-            
             # print('received from outside network -- will pass to cable')
             # send_local(received_message)
         else:
             print("But received locally -- therefore will not send")
     elif destination_ip[2] == '1':
-        print("Packet received for destination outside network... \n Forwarding to router-nic1...")
+        print("Packet received for destination outside network... \nForwarding to router-nic1...")
+        print("CURRENT SOURCE MAC ADDRESS:", source_mac)
+        print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
+        print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
+        print("CHANGING MAC ADDRESS TO R1...")
         received_message = [char for char in received_message]
+        received_message[0] = 'R'
+        received_message[1] = '2'
         received_message[2] = 'R'
         received_message[3] = '1'
-        received_message = ''.join(received_message)
-        print(received_message)
+        received_message = ''.join(received_message)      
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
 
     

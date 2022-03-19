@@ -11,3 +11,8 @@ SOURCE IP: 0x2A
 SOURCE MAC: N2
 MESSAGE: 2022-03-14 19:55:22.406213 test log node 1 + node1 listener from node2 + node2-listener
 
+
+SOURCE IP: 0x2A
+SOURCE MAC: R1
+MESSAGE: 2022-03-19 17:42:40.126939 i wanna kms
+

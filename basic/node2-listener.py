@@ -2,8 +2,6 @@ import socket
 import sys 
 import subprocess as sp
 
-from zmq import ROUTER
-
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
 status = sp.Popen.poll(extProc) # status should be 'None'

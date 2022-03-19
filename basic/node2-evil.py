@@ -11,11 +11,6 @@ LOCAL_ARP_TABLE = {
     "0x2B": "N3"
 }
 
-FIREWALL_RULE_N2 = {
-    "allow": "[0x1A,0x2B]",
-    "deny": "[]"
-}
-
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
@@ -58,7 +53,7 @@ while True:
             print()
             print("Message is too long")
             message = input("Please insert the message you want to send: ")
-        send_local(wrap_packet_ip(message, dest_ip, protocol))
+        send_local(wrap_packet_ip(message, dest_ip, protocol, source_ip))
     elif protocol == str(0):
         send_local(wrap_packet_ip("PING", dest_ip, protocol))
         server.settimeout(10)

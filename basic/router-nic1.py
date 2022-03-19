@@ -41,6 +41,14 @@ while True:
     message = received_message[16:]
     print(destination_mac)
     print(destination_ip)
+    if IP != destination_ip or MAC != destination_mac:
+        print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+        print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=source_ip, destination_ip=destination_ip))
+        print("\nProtocl: " + str(protocol))
+        print("\nData Length: " + data_length)
+        print("\nMessage: " + message)    
+        print()
+        print("PACKET NOT FOR ME. ROUTING NOW...")
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -77,8 +85,7 @@ while True:
         received_message = ''.join(received_message)
         print(received_message)
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8102))
-    else:
-        print("Packet received but it aint for you")
+
         
     
 

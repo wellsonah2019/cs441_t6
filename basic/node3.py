@@ -18,7 +18,6 @@ FIREWALL_RULE_N3 = {
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
     
 def send_out(packet):

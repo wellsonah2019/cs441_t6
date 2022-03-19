@@ -19,7 +19,6 @@ FIREWALL_RULE_N1 = {
 }
 
 def send_local(packet):
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8001))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8101))
 
 def send_out(packet):

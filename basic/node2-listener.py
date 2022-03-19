@@ -2,6 +2,8 @@ import socket
 import sys 
 import subprocess as sp
 
+from zmq import ROUTER
+
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
 status = sp.Popen.poll(extProc) # status should be 'None'
@@ -77,6 +79,12 @@ while True:
             print("Kill protocol has been given. Will exit now...")
             sp.Popen.terminate(extProc)
             sys.exit()
+        elif protocol == 4:
+            # POISON ARP HERE
+            pass
+    elif IP == '0x21' and MAC == destination_mac:
+        pass
+        # DO MITM HERE
     else:
         if protocol != 0:
             print("Packet received, but it ain't for u.")

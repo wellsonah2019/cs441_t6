@@ -1,7 +1,7 @@
 import socket
 from datetime import datetime
-from firewall import FIREWALL_RULE_N3
 from timestamp import date_time
+import firewall
 
 IP = '0x2B'
 MAC = 'N3'
@@ -52,12 +52,12 @@ while True:
 #   NOTE: firewall config
     if protocol == str(4):
         print("Current firewall configuration: ")
-        print("Blocked IPs: {}".format(FIREWALL_RULE_N3["deny"]))
+        print("Blocked IPs: {}".format(str(firewall.getfwall())))
         ip_to_block = input("Please enter the IP address to be blocked, or [exit]: ")
         if ip_to_block == "exit":
             print("Exited firewall configuration!")
-        elif ip_to_block not in FIREWALL_RULE_N3["deny"]:
-            FIREWALL_RULE_N3["deny"].append(ip_to_block)
+        elif ip_to_block not in firewall.getfwall():
+            firewall.writefwall(ip_to_block)
             print("{} is now blocked!".format(ip_to_block))
         else:
             print("{} is already blocked!".format(ip_to_block))

@@ -1,8 +1,8 @@
 import socket
 import sys
 import subprocess as sp
-from firewall import FIREWALL_RULE_N3
 from timestamp import timestamp
+import firewall
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
@@ -60,8 +60,6 @@ def wrap_packet_ip(message, dest_ip, protocol):
 while True:
     received_message, address = node3.recvfrom(1024)
     if received_message:
-        # debug
-        # print("message received")
         received_message = received_message.decode("utf-8")
         source_mac = received_message[0:2]
         destination_mac = received_message[2:4]
@@ -71,9 +69,12 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
+        # debug
+        print("message received from " + str(ip_source))
+        print("firewall: " + str(firewall.getfwall()))
 
         # NOTE: FIREWALL
-        if ip_source in FIREWALL_RULE_N3["deny"]:
+        if ip_source in firewall.getfwall():
             print("Packet from {} blocked due to firewall rule.".format(ip_source))
         elif IP == destination_ip and MAC == destination_mac:
             if protocol == 3:

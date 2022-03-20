@@ -67,7 +67,7 @@ while True:
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("-----------" + timestamp() + "-----------")
-            print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)
@@ -83,7 +83,7 @@ while True:
             sys.exit()
     else:
         print("-----------" + timestamp() + "-----------")
-        print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+        print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
         print("\nProtocol: " + str(protocol))
         print("\nData Length: " + data_length)

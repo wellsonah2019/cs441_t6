@@ -9,6 +9,9 @@
 #     "deny": []
 # }
 
+def resetfwall():
+  open('firewall.txt', 'w').close()
+
 def writefwall(ip):
   with open("firewall.txt", "a+") as f:
     f.write(ip + "\n")

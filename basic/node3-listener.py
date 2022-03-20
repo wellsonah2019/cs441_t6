@@ -23,6 +23,9 @@ cable = ("localhost", 8200)
 node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 node3.bind(("localhost", 8003))
 
+# reset firewall
+firewall.resetfwall()
+
 def reply_ping(packet):
     node3.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     node3.sendto(bytes(packet, "utf-8"), ("localhost", 8022))

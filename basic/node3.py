@@ -47,13 +47,15 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n 4. Configure firewall \n")
+    protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n 4. Configure firewall \n")
 #   NOTE: firewall config
     if protocol == str(4):
         print("Current firewall configuration: ")
         print("Blocked IPs: {}".format(FIREWALL_RULE_N3["deny"]))
-        ip_to_block = input("Please enter the IP address to be blocked: ")
-        if ip_to_block not in FIREWALL_RULE_N3["deny"]:
+        ip_to_block = input("Please enter the IP address to be blocked, or [exit]: ")
+        if ip_to_block == "exit":
+            print("Exited firewall configuration!")
+        elif ip_to_block not in FIREWALL_RULE_N3["deny"]:
             FIREWALL_RULE_N3["deny"].append(ip_to_block)
             print("{} is now blocked!".format(ip_to_block))
         else:

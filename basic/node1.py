@@ -1,5 +1,6 @@
 import socket
 from datetime import datetime
+from timestamp import date_time
 
 IP = '0x1A'
 MAC = 'N1'
@@ -82,7 +83,7 @@ while True:
 
     elif protocol == str(1):
         log_message = input("Please insert the log details: ")
-        log_message = str(datetime.now()) + " " + log_message
+        log_message = str(date_time()) + " " + log_message
         send_local(wrap_packet_ip(log_message, dest_ip, protocol))
 
     else: 

@@ -1,6 +1,7 @@
 import socket
 import sys 
 import subprocess as sp
+from timestamp import timestamp
 
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
@@ -64,10 +65,12 @@ while True:
     protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
+            print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)
+            print("----------------------------------")
         elif protocol == 0:
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
             print(message)
@@ -84,6 +87,7 @@ while True:
         pass
         # DO MITM HERE
     else:
+        print("-----------" + timestamp() + "-----------")
         print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
         print("\nProtocl: " + str(protocol))
@@ -91,3 +95,4 @@ while True:
         print("\nMessage: " + message)    
         print()
         print("PACKET NOT FOR ME. DROPPING NOW...")
+        print("----------------------------------")

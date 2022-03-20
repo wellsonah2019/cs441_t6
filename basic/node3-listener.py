@@ -60,6 +60,8 @@ def wrap_packet_ip(message, dest_ip, protocol):
 while True:
     received_message, address = node3.recvfrom(1024)
     if received_message:
+        # debug
+        # print("message received")
         received_message = received_message.decode("utf-8")
         source_mac = received_message[0:2]
         destination_mac = received_message[2:4]
@@ -69,8 +71,7 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
-        # debug
-        print("message received")
+
         # NOTE: FIREWALL
         if ip_source in FIREWALL_RULE_N3["deny"]:
             print("Packet from {} blocked due to firewall rule.".format(ip_source))
@@ -79,15 +80,37 @@ while True:
                 print("-----------" + timestamp() + "-----------")
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Simple Messaging")
                 print("\nData Length: " + data_length)
                 print("\nMessage: " + message)
                 print("----------------------------------")
             elif protocol == 0:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Ping")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
                 print(message)
             elif protocol == 1:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Log")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 log_protocol(ip_source, source_mac, message)
             elif protocol == 2:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Kill")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 print("Kill protocol has been given. Will exit now...")
                 sp.Popen.terminate(extProc)
                 sys.exit()

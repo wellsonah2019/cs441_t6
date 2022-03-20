@@ -90,7 +90,7 @@ while True:
         print("-----------" + timestamp() + "-----------")
         print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
-        print("\nProtocl: " + str(protocol))
+        print("\nProtocol: " + str(protocol))
         print("\nData Length: " + data_length)
         print("\nMessage: " + message)    
         print()

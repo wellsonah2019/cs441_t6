@@ -30,6 +30,7 @@ def reply_ping(packet):
 def log_protocol(source_ip, source_mac, message):
     with open('node3.log', 'a') as file:
         file.write("\nSOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
+    print("Successfully written to log file!")
 
 def wrap_packet_ip(message, dest_ip, protocol):
     ethernet_header = ""
@@ -94,7 +95,7 @@ while True:
             print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
-            print("\nProtocl: " + str(protocol))
+            print("\nProtocol: " + str(protocol))
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)    
             print()

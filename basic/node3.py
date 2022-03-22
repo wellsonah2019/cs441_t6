@@ -2,16 +2,15 @@ import socket
 from datetime import datetime
 from timestamp import date_time
 import firewall
+import json
 
 IP = '0x2B'
 MAC = 'N3'
+
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(("localhost", 8033))
 
-LOCAL_ARP_TABLE = {
-    "0x21": "R2",
-    "0x2A": "N2"
-}
+local_arp_table = json.loads(open('arp-table-node3.json', 'r').read())
 
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
@@ -36,8 +35,8 @@ def wrap_packet_ip(message, dest_ip, protocol):
     elif len(data_length) == 1:
         data_length = '00' + data_length
 
-    if dest_ip in LOCAL_ARP_TABLE:
-        destination_mac = LOCAL_ARP_TABLE[dest_ip] 
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
     else:
         destination_mac = 'R2'
     
@@ -48,7 +47,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n 4. Configure firewall \n")
+    protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n0. Ping Protocol \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n4. Configure firewall \n5. ARP Poisoning\n")
 #   NOTE: firewall config
     if protocol == str(4):
         print("Current firewall configuration: ")
@@ -94,7 +93,12 @@ while True:
             log_message = input("Please insert the log details: ")
             log_message = str(date_time()) + " " + log_message
             send_local(wrap_packet_ip(log_message, dest_ip, protocol))
-
+        elif protocol == str(5):
+            fake_ip = input("Please insert your fake IP: ")
+            if " " in fake_ip:
+                fake_ip = input("Do not include spaces! Please insert your fake ip: ")
+            message = "{} has IP {}".format(MAC, fake_ip)
+            send_local(wrap_packet_ip(message, dest_ip, protocol))
         else: 
             message = ''
             send_local(wrap_packet_ip(message, dest_ip, protocol))

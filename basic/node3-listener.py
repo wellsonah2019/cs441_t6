@@ -3,16 +3,14 @@ import sys
 import subprocess as sp
 from timestamp import timestamp
 import firewall
+import json
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
 IP = '0x2B'
 MAC = 'N3'
 
-LOCAL_ARP_TABLE = {
-    "0x21": "R2",
-    "0x2A": "N2"
-}
+local_arp_table = json.loads(open('arp-table-node3.json', 'r').read())
 
 # FIREWALL_RULE_N3 = {
 #     "allow": [],
@@ -118,6 +116,26 @@ while True:
                 print("Kill protocol has been given. Will exit now...")
                 sp.Popen.terminate(extProc)
                 sys.exit()
+            elif protocol == 5:
+            # POISON ARP HERE
+                message = message.split(' ')
+                my_mac = message[0]
+                fake_ip = message[-1]
+                local_arp_table[fake_ip] = my_mac
+                with open('arp-table-node3.json', 'w') as f:
+                    f.write(json.dumps(local_arp_table))
+                local_arp_table = json.loads(open('arp-table-node3.json', 'r').read()) 
+                print("Noticed ARP table change. Restarting sender node...")
+                sp.Popen.terminate(extProc)
+                try:
+                    extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py
+                    print("Sender node restarted.")
+                except:
+                    print("Failed to restart sender node...")
+                    print("Please restart manually")
+                    print()
+        elif destination_ip != IP and MAC == destination_mac:
+            print("ARP-POISONED PACKET RECEIVED...")
         else:
             print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))

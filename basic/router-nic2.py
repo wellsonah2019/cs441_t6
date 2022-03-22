@@ -7,10 +7,7 @@ MAC = 'R2'
 
 connected_to_me = {
     "0x2A": "N2",
-    "0x2B": "N3"
-}
-
-other_router = {
+    "0x2B": "N3",
     "0x11": "R1"
 }
 
@@ -94,6 +91,15 @@ while True:
         elif protocol == 2:
             print("Kill protocol has been given. Will exit now...")
             sys.exit()
+        elif protocol == 5:
+            print("ARP Request has been made...")
+            message = message.split(' ')
+            my_mac = message[0]
+            fake_ip = message[-1]
+            print("Registering IP {} with MAC {}".format(fake_ip, my_mac))
+            connected_to_me[fake_ip] = my_mac
+            print("Current ARP Table:")
+            print(connected_to_me)
     elif destination_ip in connected_to_me:
         print("Packet received for destination current network... \nForwading to current network...")
         print("CURRENT SOURCE MAC ADDRESS:", source_mac)
@@ -122,8 +128,7 @@ while True:
         received_message = [char for char in received_message]
         received_message[0] = 'R'
         received_message[1] = '2'
-        received_message[2] = 'R'
-        received_message[3] = '1'
+        received_message[2:4] = [char for char in connected_to_me['0x11']]
         received_message = ''.join(received_message)      
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
 

@@ -17,7 +17,7 @@ while True:
     print(data_length)
     message = received_message[16:]
     protocol = int(protocol)
-    print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+    print("\nThe packet received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
     print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
     print('\nProtocol: ' + str(protocol))
     print("\nData Length: " + data_length)

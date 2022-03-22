@@ -1,5 +1,6 @@
 import socket
 from datetime import datetime
+from timestamp import date_time
 
 IP = '0x2A'
 MAC = 'N2'
@@ -49,7 +50,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n")
+    protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n")
     dest_ip = input("Please insert the destination: ")
     if protocol == str(3):
         message = input("Please insert the message you want to send: ")
@@ -78,7 +79,7 @@ while True:
 
     elif protocol == str(1):
         log_message = input("Please insert the log details: ")
-        log_message = str(datetime.now()) + " " + log_message
+        log_message = str(date_time()) + " " + log_message
         send_local(wrap_packet_ip(log_message, dest_ip, protocol))
 
     else: 

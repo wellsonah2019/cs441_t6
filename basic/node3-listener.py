@@ -1,6 +1,8 @@
 import socket
 import sys
 import subprocess as sp
+from timestamp import timestamp
+import firewall
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
@@ -12,14 +14,17 @@ LOCAL_ARP_TABLE = {
     "0x2A": "N2"
 }
 
-FIREWALL_RULE_N3 = {
-    "allow": [],
-    "deny": []
-}
+# FIREWALL_RULE_N3 = {
+#     "allow": [],
+#     "deny": []
+# }
 
 cable = ("localhost", 8200) 
 node3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 node3.bind(("localhost", 8003))
+
+# reset firewall
+firewall.resetfwall()
 
 def reply_ping(packet):
     node3.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
@@ -28,6 +33,7 @@ def reply_ping(packet):
 def log_protocol(source_ip, source_mac, message):
     with open('node3.log', 'a') as file:
         file.write("\nSOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
+    print("Successfully written to log file!")
 
 def wrap_packet_ip(message, dest_ip, protocol):
     ethernet_header = ""
@@ -66,30 +72,59 @@ while True:
         data_length = received_message[13:16]
         message = received_message[16:]
         protocol = int(protocol)
+        # debug
+        print("message received from " + str(ip_source))
+        print("firewall: " + str(firewall.getfwall()))
 
         # NOTE: FIREWALL
-        if ip_source in FIREWALL_RULE_N3["deny"]:
+        if ip_source in firewall.getfwall():
             print("Packet from {} blocked due to firewall rule.".format(ip_source))
         elif IP == destination_ip and MAC == destination_mac:
             if protocol == 3:
-                print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Simple Messaging")
                 print("\nData Length: " + data_length)
                 print("\nMessage: " + message)
+                print("----------------------------------")
             elif protocol == 0:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Ping")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
                 print(message)
             elif protocol == 1:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Log")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 log_protocol(ip_source, source_mac, message)
             elif protocol == 2:
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: Kill")
+                print("\nData Length: " + data_length)
+                print("\nMessage: " + message)
+                print("----------------------------------")
                 print("Kill protocol has been given. Will exit now...")
                 sp.Popen.terminate(extProc)
                 sys.exit()
         else:
-            print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
-            print("\nProtocl: " + str(protocol))
+            print("\nProtocol: " + str(protocol))
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)    
             print()
             print("PACKET NOT FOR ME. DROPPING NOW...")
+            print("----------------------------------")

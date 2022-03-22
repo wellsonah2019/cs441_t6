@@ -1,6 +1,7 @@
 import socket
 import sys 
 import subprocess as sp
+from timestamp import timestamp
 
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
@@ -64,16 +65,40 @@ while True:
     protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
-            print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Simple Messaging")
             print("\nData Length: " + data_length)
             print("\nMessage: " + message)
+            print("----------------------------------")
         elif protocol == 0:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Ping")
+            print("\nData Length: " + data_length)
+            print("\nMessage: " + message)
+            print("----------------------------------")
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
             print(message)
         elif protocol == 1:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Log")
+            print("\nData Length: " + data_length)
+            print("\nMessage: " + message)
+            print("----------------------------------")
             log_protocol(ip_source, source_mac, message)
         elif protocol == 2:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Kill")
+            print("\nData Length: " + data_length)
+            print("\nMessage: " + message)
+            print("----------------------------------")
             print("Kill protocol has been given. Will exit now...")
             sp.Popen.terminate(extProc)
             sys.exit()
@@ -84,10 +109,12 @@ while True:
         pass
         # DO MITM HERE
     else:
-        print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+        print("-----------" + timestamp() + "-----------")
+        print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
-        print("\nProtocl: " + str(protocol))
+        print("\nProtocol: " + str(protocol))
         print("\nData Length: " + data_length)
         print("\nMessage: " + message)    
         print()
         print("PACKET NOT FOR ME. DROPPING NOW...")
+        print("----------------------------------")

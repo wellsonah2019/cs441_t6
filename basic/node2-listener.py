@@ -4,17 +4,14 @@ import subprocess as sp
 from timestamp import timestamp
 from datetime import datetime
 
+import json
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
 status = sp.Popen.poll(extProc) # status should be 'None'
 IP = '0x2A'
 MAC = 'N2'
 
-LOCAL_ARP_TABLE = {
-    "0x21": "R2",
-    "0x2A": "N2",
-    "0x2B": "N3"
-}
+local_arp_table = json.loads(open('arp-table-node2.json', 'r').read())
 
 cable = ("localhost", 8200) 
 node2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -44,8 +41,8 @@ def wrap_packet_ip(message, dest_ip, protocol):
     elif len(data_length) == 1:
         data_length = '00' + data_length
 
-    if dest_ip in LOCAL_ARP_TABLE:
-        destination_mac = LOCAL_ARP_TABLE[dest_ip] 
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
     else:
         destination_mac = 'R2'
     ethernet_header = ethernet_header + source_mac + destination_mac
@@ -68,9 +65,9 @@ while True:
     if received_message[12] == 'r':
         ping_type = received_message[12:15]
         protocol = received_message[15:16]
-        data_length = int(received_message[16:19])
+        data_length = received_message[16:19]
         # print(data_length)
-        end_pos = 19 + data_length
+        end_pos = 19 + int(data_length)
         message = received_message[19:end_pos]
         protocol = int(protocol)
         start_time = received_message[end_pos:]
@@ -78,7 +75,7 @@ while True:
         protocol = received_message[12:13]
         data_length = int(received_message[13:16])
         # print(data_length)
-        end_pos = 16 + data_length
+        end_pos = 16 + int(data_length)
         message = received_message[16:end_pos]
         protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:
@@ -97,7 +94,7 @@ while True:
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nProtocol: Ping")
-            print("\nData Length: " + str(data_length))
+            print("\nData Length: " + data_length)
             print("\nMessage: " + message)
             print("----------------------------------")
             total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
@@ -125,18 +122,32 @@ while True:
             print("Kill protocol has been given. Will exit now...")
             sp.Popen.terminate(extProc)
             sys.exit()
-        elif protocol == 4:
+        elif protocol == 5:
             # POISON ARP HERE
-            pass
-    elif IP == '0x21' and MAC == destination_mac:
-        pass
-        # DO MITM HERE
+            message = message.split(' ')
+            my_mac = message[0]
+            fake_ip = message[-1]
+            local_arp_table[fake_ip] = my_mac
+            with open('arp-table-node2.json', 'w') as f:
+                f.write(json.dumps(local_arp_table))
+            local_arp_table = json.loads(open('arp-table-node2.json', 'r').read()) 
+            print("Noticed ARP table change. Restarting sender node...")
+            sp.Popen.terminate(extProc)
+            try:
+                extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py
+                print("Sender node restarted.")
+            except:
+                print("Failed to restart sender node...")
+                print("Please restart manually")
+                print()
+    elif destination_ip != IP and MAC == destination_mac:
+        print("ARP-POISONED PACKET RECEIVED...")
     else:
         print("-----------" + timestamp() + "-----------")
         print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
         print("\nProtocol: " + str(protocol))
-        print("\nData Length: " + str(data_length))
+        print("\nData Length: " + data_length)
         print("\nMessage: " + message)    
         print()
         print("PACKET NOT FOR ME. DROPPING NOW...")

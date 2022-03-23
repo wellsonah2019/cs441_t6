@@ -3,7 +3,6 @@ import sys
 import subprocess as sp
 from timestamp import timestamp
 from datetime import datetime
-
 import json
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
@@ -49,8 +48,10 @@ def wrap_packet_ip(message, dest_ip, protocol):
     packet = ethernet_header + IP_header + ping_type + protocol + data_length + data
     
     return packet
- 
+print('packet received before while loop')
+
 while True:
+    print('packet received')
     received_message, addr = node2.recvfrom(1024)
     received_message = received_message.decode("utf-8")
     source_mac = received_message[0:2]
@@ -142,6 +143,18 @@ while True:
                 print()
     elif destination_ip != IP and MAC == destination_mac:
         print("ARP-POISONED PACKET RECEIVED...")
+        print("-----------" + timestamp() + "-----------")
+        print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+        print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+        print("\nProtocol: " + str(protocol))
+        print("\nData Length: " + data_length)
+        print("\nMessage: " + message)    
+        print()
+        print("PACKET FOR 'ME'. DOING MITM ATTACK...")
+        print("----------------------------------")
+
+        # change message, source ip, etc. into a real packet to actual destination
+
     else:
         print("-----------" + timestamp() + "-----------")
         print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))

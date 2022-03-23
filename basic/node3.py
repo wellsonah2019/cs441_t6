@@ -110,8 +110,8 @@ while True:
             server.settimeout(10)
             ip_source = ""
             try:
-                end = datetime.now()
                 received_message, addr = server.recvfrom(1024)
+                end = datetime.now()
                 received_message = received_message.decode("utf-8")
                 source_mac = received_message[0:2]
                 destination_mac = received_message[2:4]

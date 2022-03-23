@@ -148,5 +148,4 @@ while True:
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8102))
 
         
-    
 

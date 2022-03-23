@@ -2,6 +2,7 @@ import socket
 import sys
 import subprocess as sp
 from timestamp import timestamp
+from datetime import datetime
 
 extProc = sp.Popen(['python','node1.py']) # runs myPyScript.py 
 
@@ -36,8 +37,9 @@ def wrap_packet_ip(message, dest_ip, protocol):
     IP_header = IP_header + source_ip + dest_ip
     source_mac = MAC
     protocol = protocol
-    data = message + 'r'
+    data = message 
     data_length = str(len(message))
+    ping_type = 'rep'
 
     if len(data_length) == 2:
         data_length = '0' + data_length
@@ -49,7 +51,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     else:
         destination_mac = 'R1'
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + protocol + data_length + data
+    packet = ethernet_header + IP_header + ping_type + protocol + data_length + data
     
     return packet
  
@@ -60,10 +62,27 @@ while True:
     destination_mac = received_message[2:4]
     ip_source = received_message[4:8]
     destination_ip =  received_message[8:12]
-    protocol = received_message[12:13]
-    data_length = received_message[13:16]
-    message = received_message[16:]
-    protocol = int(protocol)
+    ping_type = ''
+    protocol = ''
+    data_length = ''
+    message = ''
+    start_time = ''
+    if received_message[12] == 'r':
+        ping_type = received_message[12:15]
+        protocol = received_message[15:16]
+        data_length = int(received_message[16:19])
+        # print(data_length)
+        end_pos = 19 + data_length
+        message = received_message[19:end_pos]
+        protocol = int(protocol)
+        start_time = received_message[end_pos:]
+    else:
+        protocol = received_message[12:13]
+        data_length = int(received_message[13:16])
+        # print(data_length)
+        end_pos = 16 + data_length
+        message = received_message[16:end_pos]
+        protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("-----------" + timestamp() + "-----------")
@@ -74,13 +93,18 @@ while True:
             print("\nMessage: " + message)
             print("----------------------------------")
         elif protocol == 0:
+            end = datetime.now()
+            print(end)
             print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nProtocol: Ping")
-            print("\nData Length: " + data_length)
+            print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)
             print("----------------------------------")
+            total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
+            print("Ping successful: ", total.total_seconds() * 1000)
+            # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
             print(message)
         elif protocol == 1:
@@ -108,7 +132,7 @@ while True:
         print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
         print("\nProtocol: " + str(protocol))
-        print("\nData Length: " + data_length)
+        print("\nData Length: " + str(data_length))
         print("\nMessage: " + message)    
         print()
         print("PACKET NOT FOR ME. DROPPING NOW...")

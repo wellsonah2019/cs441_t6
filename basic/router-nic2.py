@@ -37,7 +37,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     IP_header = IP_header + source_ip + dest_ip
     source_mac = MAC
     protocol = protocol
-    data = message + 'r'
+    data = message
     data_length = str(len(message))
 
     if len(data_length) == 2:
@@ -63,17 +63,39 @@ while True:
     destination_mac = received_message[2:4]
     source_ip = received_message[4:8]
     destination_ip =  received_message[8:12]
-    protocol = received_message[12:13]
-    data_length = received_message[13:16]
-    protocol = int(protocol)
-    message = received_message[16:]
+    ping_type = ''
+    protocol = ''
+    data_length = ''
+    message = ''
+    start_time = ''
+    if received_message[12] == 'r':
+        ping_type = received_message[12:15]
+        protocol = received_message[15:16]
+        data_length = int(received_message[16:19])
+        # print(data_length)
+        end_pos = 19 + data_length
+        message = received_message[19:end_pos]
+        protocol = int(protocol)
+        start_time = received_message[end_pos:]
+    else:
+        protocol = received_message[12:13]
+        data_length = int(received_message[13:16])
+        # print(data_length)
+        end_pos = 16 + data_length
+        message = received_message[16:end_pos]
+        protocol = int(protocol)
+    
+    # protocol = received_message[12:13]
+    # data_length = received_message[13:16]
+    # protocol = int(protocol)
+    # message = received_message[16:]
     print(destination_mac)
     print(destination_ip)
     if IP != destination_ip or MAC != destination_mac:
         print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=source_ip, destination_ip=destination_ip))
         print("\nProtocl: " + str(protocol))
-        print("\nData Length: " + data_length)
+        print("\nData Length: " + str(data_length))
         print("\nMessage: " + message)    
         print()
         print("PACKET NOT FOR ME. ROUTING NOW...")
@@ -81,10 +103,10 @@ while True:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
-            print("\nData Length: " + data_length)
+            print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)
         elif protocol == 0:
-            print("RECEVIED PING REQUEST... \nREPLYING NOW...")
+            print("RECEIVED PING REQUEST... \nREPLYING NOW...")
             if source_ip[2] == '2':
                 reply_ping(wrap_packet_ip(message, source_ip, str(protocol)))
             else:
@@ -103,7 +125,7 @@ while True:
         received_message = MAC + str(connected_to_me[destination_ip]) + received_message[4:]
         if source_ip[2] != '2':
             if protocol == 0:
-                if received_message[-1] == 'r':
+                if ping_type == 'rep':
                     reply_ping(received_message)
                 else:
                     send_local(received_message)

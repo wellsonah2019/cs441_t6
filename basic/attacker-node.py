@@ -13,7 +13,9 @@ local_arp_table = json.loads(open('arp-table-node1.json', 'r').read())
 
 
 def send_local(packet):
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8101))
+  server.sendto(bytes(packet, "utf-8"), ("localhost", 8102)) # router
+  server.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
+  server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
 
 def send_out(packet):
     pass
@@ -95,7 +97,7 @@ def wrap_packet_tcp(message, dest_ip, protocol, start_time):
     return packet
 
 while True:
-    protocol = input("[Node 1] \n Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection")
+    protocol = input("[Attacker Node] \n Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection")
     dest_ip = input("Please insert the destination: ")
     print(type(protocol))
     print(type(dest_ip))
@@ -165,11 +167,7 @@ while True:
             send_local(wrap_packet_ip(message, dest_ip, protocol))
     # NOTE: tcp stuff
     elif protocol == str(6):
-        fake_ip = input("Please insert your fake IP: ")
-        if " " in fake_ip:
-            fake_ip = input("Do not include spaces! Please insert your fake ip: ")
-        message = "{} has IP {}".format(MAC, fake_ip)
-        send_local(wrap_packet_ip(message, dest_ip, protocol))
+        pass
     else: 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

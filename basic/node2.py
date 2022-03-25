@@ -13,9 +13,10 @@ local_arp_table = json.loads(open('arp-table-node2.json', 'r').read())
 
 
 def send_local(packet):
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8102)) # router
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8006))
 
 def wrap_packet_ping(message, dest_ip, protocol, start_time):
     ethernet_header = ""
@@ -67,6 +68,38 @@ def wrap_packet_ip(message, dest_ip, protocol):
     # print(destination_mac)
     ethernet_header = ethernet_header + source_mac + destination_mac
     packet = ethernet_header + IP_header + ping_type + protocol + data_length + data
+    
+    return packet
+
+# NOTE tcp stuff
+def wrap_packet_tcp(dest_ip, protocol, ctl=None, message="", seq = 1000, ack = None, special = 1):
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+    ctl = ctl
+    seq = str(seq)
+    ack = str(ack)
+    window_size = "100"
+    special = str(special)
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + ctl + protocol +\
+        data_length + data + seq + ack + window_size + special
     
     return packet
 
@@ -129,12 +162,16 @@ while True:
         send_local(wrap_packet_ip(log_message, dest_ip, protocol))
 
     elif protocol == str(5):
-            fake_ip = input("Please insert your fake IP: ")
-            if " " in fake_ip:
-                fake_ip = input("Do not include spaces! Please insert your fake ip: ")
-            message = "{} has IP {}".format(MAC, fake_ip)
-            send_local(wrap_packet_ip(message, dest_ip, protocol))
-
+        fake_ip = input("Please insert your fake IP: ")
+        if " " in fake_ip:
+            fake_ip = input("Do not include spaces! Please insert your fake ip: ")
+        message = "{} has IP {}".format(MAC, fake_ip)
+        send_local(wrap_packet_ip(message, dest_ip, protocol))
+    elif protocol == str(6):
+        print("fuck")
+        # tcp handshake 1
+        # send to 3, attacker sniffs
+        send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
     else: 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

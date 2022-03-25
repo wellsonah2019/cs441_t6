@@ -73,7 +73,17 @@ while True:
         data_length = ''
         message = ''
         start_time = ''
-        if received_message[12] == 'r':
+        protocols = ["SYN", "ACK", "SAK", "RST"]
+        if received_message[12:15] in protocols:
+            tcp_control_flag = received_message[12:15]
+            protocol = received_message[15:16]
+            data_length = received_message[16:19]
+            # print(data_length)
+            end_pos = 19 + int(data_length)
+            message = received_message[19:end_pos]
+            protocol = int(protocol)
+            start_time = received_message[end_pos:]
+        elif received_message[12] == 'r':
             ping_type = received_message[12:15]
             protocol = received_message[15:16]
             data_length = received_message[16:19]
@@ -96,6 +106,7 @@ while True:
         if ip_source in firewall.getfwall():
             print("Packet from {} blocked due to firewall rule.".format(ip_source))
         elif IP == destination_ip and MAC == destination_mac:
+            print("test 3")
             if protocol == 3:
                 print("-----------" + timestamp() + "-----------")
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -157,6 +168,19 @@ while True:
                     print("Failed to restart sender node...")
                     print("Please restart manually")
                     print()
+            elif str(protocol) == "6":
+                print("-----------" + timestamp() + "-----------")
+                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                print("\nProtocol: " + str(protocol))
+                print("\nData Length: " + str(data_length))
+                if tcp_control_flag:
+                    if tcp_control_flag == "SAK":
+                        print("\nTCP Control Flag: SYN-ACK")
+                    else:
+                        print("\nTCP Control Flag: " + tcp_control_flag)
+                print("\nMessage: " + message)    
+                print("----------------------------------")
         elif destination_ip != IP and MAC == destination_mac:
             print("ARP-POISONED PACKET RECEIVED...")
             print("-----------" + timestamp() + "-----------")

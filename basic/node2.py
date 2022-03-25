@@ -11,10 +11,6 @@ server.bind(("localhost", 8022))
 
 local_arp_table = json.loads(open('arp-table-node2.json', 'r').read())
 
-FIREWALL_RULE_N2 = {
-    "allow": "[0x1A,0x2B]",
-    "deny": "[]"
-}
 
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
@@ -76,7 +72,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n")
+    protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection \n")
     dest_ip = input("Please insert the destination: ")
     if protocol == str(3):
         message = input("Please insert the message you want to send: ")

@@ -11,10 +11,6 @@ server.bind(("localhost", 8011))
 
 local_arp_table = json.loads(open('arp-table-node1.json', 'r').read())
 
-FIREWALL_RULE_N1 = {
-    "allow": "[0x2A,0x2B]",
-    "deny": "[]"
-}
 
 def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8101))
@@ -142,6 +138,13 @@ while True:
                 fake_ip = input("Do not include spaces! Please insert your fake ip: ")
             message = "{} has IP {}".format(MAC, fake_ip)
             send_local(wrap_packet_ip(message, dest_ip, protocol))
+    # NOTE: tcp stuff
+    elif protocol == str(6):
+        fake_ip = input("Please insert your fake IP: ")
+        if " " in fake_ip:
+            fake_ip = input("Do not include spaces! Please insert your fake ip: ")
+        message = "{} has IP {}".format(MAC, fake_ip)
+        send_local(wrap_packet_ip(message, dest_ip, protocol))
     else: 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

@@ -46,16 +46,16 @@ def wrap_packet_ip(message, dest_ip, protocol):
     ping_type = 'rep'
 
     if len(data_length) == 2:
-        data_length = '0' + data_length
+        data_length = '0' + str(data_length)
     elif len(data_length) == 1:
-        data_length = '00' + data_length
+        data_length = '00' + str(data_length)
 
     if dest_ip in local_arp_table:
         destination_mac = local_arp_table[dest_ip] 
     else:
         destination_mac = 'R2'
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + ping_type + protocol + data_length + data
+    packet = ethernet_header + IP_header + ping_type + protocol + str(data_length) + data
     
     return packet
  
@@ -101,7 +101,7 @@ while True:
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
                 print("\nProtocol: Simple Messaging")
-                print("\nData Length: " + data_length)
+                print("\nData Length: " + str(data_length))
                 print("\nMessage: " + message)
                 print("----------------------------------")
             elif protocol == 0:
@@ -111,7 +111,7 @@ while True:
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
                 print("\nProtocol: Ping")
-                print("\nData Length: " + data_length)
+                print("\nData Length: " + str(data_length))
                 print("\nMessage: " + message)
                 print("----------------------------------")
                 total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
@@ -124,7 +124,7 @@ while True:
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
                 print("\nProtocol: Log")
-                print("\nData Length: " + data_length)
+                print("\nData Length: " + str(data_length))
                 print("\nMessage: " + message)
                 print("----------------------------------")
                 log_protocol(ip_source, source_mac, message)
@@ -133,7 +133,7 @@ while True:
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
                 print("\nProtocol: Kill")
-                print("\nData Length: " + data_length)
+                print("\nData Length: " + str(data_length))
                 print("\nMessage: " + message)
                 print("----------------------------------")
                 print("Kill protocol has been given. Will exit now...")
@@ -163,7 +163,7 @@ while True:
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nProtocol: " + str(protocol))
-            print("\nData Length: " + data_length)
+            print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)    
             print()
             print("PACKET FOR 'ME'. DOING MITM ATTACK...")
@@ -173,7 +173,7 @@ while True:
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
             print("\nProtocol: " + str(protocol))
-            print("\nData Length: " + data_length)
+            print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)    
             print()
             print("PACKET NOT FOR ME. DROPPING NOW...")

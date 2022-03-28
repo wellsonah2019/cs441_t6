@@ -3,6 +3,7 @@ from datetime import datetime
 from timestamp import date_time
 import firewall
 import json
+# import pickle
 
 IP = '0x2B'
 MAC = 'N3'
@@ -72,6 +73,41 @@ def wrap_packet_ip(message, dest_ip, protocol):
     
     return packet
 
+# NOTE creates tcp packets to send
+def wrap_packet_tcp(
+    dest_ip, protocol, ctl=None, message="", 
+    seq = 1000, ack = None, special = 1
+):
+    # special is to indicate the step of the attack, starting from 1
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+    ctl = ctl
+    seq = str(seq)
+    ack = str(ack)
+    window_size = "100"
+    special = str(special)
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + ctl + protocol +\
+        data_length + data + seq + ack + window_size + special
+    
+    return json.dumps(packet)
 
 while True:
     protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n0. Ping Protocol \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n4. Configure firewall \n5. ARP Poisoning\n")

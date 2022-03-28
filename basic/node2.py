@@ -2,6 +2,7 @@ import socket
 from datetime import datetime
 from timestamp import date_time
 import json
+# import pickle
 
 IP = '0x2A'
 MAC = 'N2'
@@ -71,8 +72,12 @@ def wrap_packet_ip(message, dest_ip, protocol):
     
     return packet
 
-# NOTE tcp stuff
-def wrap_packet_tcp(dest_ip, protocol, ctl=None, message="", seq = 1000, ack = None, special = 1):
+# NOTE creates tcp packets to send
+def wrap_packet_tcp(
+    dest_ip, protocol, ctl=None, message="", 
+    seq = 1000, ack = None, special = 1
+):
+    # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
     IP_header = ""
     source_ip = IP
@@ -98,10 +103,23 @@ def wrap_packet_tcp(dest_ip, protocol, ctl=None, message="", seq = 1000, ack = N
         destination_mac = 'R2'
     # print(destination_mac)
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + ctl + protocol +\
-        data_length + data + seq + ack + window_size + special
+    packet = {
+        "ethernet_header": ethernet_header,
+        "IP_header": IP_header, 
+        "ctl": ctl, 
+        "protocol": protocol, 
+        "data_length": data_length, 
+        "data": data, 
+        "seq": seq, 
+        "ack": ack, 
+        "window_size": window_size, 
+        "special": special 
+    }
     
-    return packet
+    # ethernet_header + IP_header + ctl + protocol +\
+    #     data_length + data + seq + seq + window_size + special
+    
+    return json.dumps(packet)
 
 
 while True:
@@ -168,9 +186,10 @@ while True:
         message = "{} has IP {}".format(MAC, fake_ip)
         send_local(wrap_packet_ip(message, dest_ip, protocol))
     elif protocol == str(6):
-        print("fuck")
-        # tcp handshake 1
-        # send to 3, attacker sniffs
+        print("sending tcp packet") # testing
+        # NOTE: STEP 1 
+        # send to 3, attacker sniffs packer
+        print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
         send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
     else: 
         message = ''

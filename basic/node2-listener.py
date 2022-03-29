@@ -57,32 +57,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     return packet
 print('packet received before while loop')
 
-# NOTE: Send TCP packet
-def wrap_packet_tcp(message, dest_ip, protocol, start_time):
-    ethernet_header = ""
-    IP_header = ""
-    source_ip = IP
-    IP_header = IP_header + source_ip + dest_ip
-    source_mac = MAC
-    protocol = protocol
-    data = message
-    data_length = str(len(message))
-    tcp_type = 'req'
-    start_time = start_time
 
-    if len(data_length) == 2:
-        data_length = '0' + data_length
-    elif len(data_length) == 1:
-        data_length = '00' + data_length
-
-    if dest_ip in local_arp_table:
-        destination_mac = local_arp_table[dest_ip] 
-    else:
-        destination_mac = 'R1'
-    ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + ping_type + protocol + data_length + data + start_time
-    
-    return packet
 
 while True:
     print('packet received')

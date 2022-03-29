@@ -53,10 +53,9 @@ def wrap_packet_ip(message, dest_ip, protocol):
     return packet
 print('packet received before while loop')
 
-# NOTE creates tcp packets to send
 def wrap_packet_tcp(
     dest_ip, protocol, ctl=None, message="", 
-    seq = 1000, ack = None, special = 1
+    seq = 20, ack = None, special = 1
 ):
     # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
@@ -110,6 +109,7 @@ while True:
     destination_mac = received_message[2:4]
     ip_source = received_message[4:8]
     destination_ip =  received_message[8:12]
+    special=''
 
     # protocols = ["SYN", "ACK", "SAK", "RST"]
     if "{" in received_message and "}" in received_message:
@@ -159,3 +159,15 @@ while True:
     print("\nAck: " + ack)
     print("\nMessage: " + message)    
     print("----------------------------------")
+
+    print("special is ", special)
+    if str(special).strip() == "2": 
+        to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3)
+        print("sending " + to_send)
+        node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
+        print("Resetting TCP connection... muahahaha!")
+
+        to_send = wrap_packet_tcp("0x2B", "6", "SYN", seq=1000, special=4)
+        print("sending " + to_send)
+        node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
+        print("Starting new handshake with node 3....")

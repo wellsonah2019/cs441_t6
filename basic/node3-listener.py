@@ -27,6 +27,55 @@ node3.bind(("localhost", 8003))
 # reset firewall
 firewall.resetfwall()
 
+def wrap_packet_tcp(
+    dest_ip, protocol, ctl=None, message="", 
+    seq = 20, ack = None, special = 1
+):
+    # special is to indicate the step of the attack, starting from 1
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+    ctl = ctl
+    seq = str(seq)
+    ack = str(ack)
+    window_size = "100"
+    special = str(special)
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = {
+        "ethernet_header": ethernet_header,
+        "IP_header": IP_header, 
+        "ctl": ctl, 
+        "protocol": protocol, 
+        "data_length": data_length, 
+        "data": data, 
+        "seq": seq, 
+        "ack": ack, 
+        "window_size": window_size, 
+        "special": special 
+    }
+    
+    # ethernet_header + IP_header + ctl + protocol +\
+    #     data_length + data + seq + seq + window_size + special
+    
+    return json.dumps(packet)
+
+
 def reply_ping(packet):
     node3.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     node3.sendto(bytes(packet, "utf-8"), ("localhost", 8022))
@@ -261,6 +310,18 @@ while True:
                 print("\nAck: " + ack)
                 print("\nMessage: " + message)    
                 print("----------------------------------")
+                # NOTE step 2 of TCP connection
+                print("special is ", special)
+                if str(special).strip() == "1": 
+                    to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=50, ack=int(seq)+1, special=2)
+                    print("sending " + to_send)
+                    node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
+                    node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
+                    print("Step 2 of TCP handshake done!")
+                # NOTE step 3 of attack
+                elif str(special).strip() == "3":
+                    pass
+                    # TODO 
         elif destination_ip != IP and MAC == destination_mac:
             print("ARP-POISONED PACKET RECEIVED...")
             print("-----------" + timestamp() + "-----------")

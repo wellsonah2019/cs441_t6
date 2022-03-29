@@ -75,7 +75,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
 # NOTE creates tcp packets to send
 def wrap_packet_tcp(
     dest_ip, protocol, ctl=None, message="", 
-    seq = 1000, ack = None, special = 1
+    seq = 20, ack = None, special = 1
 ):
     # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
@@ -188,9 +188,10 @@ while True:
     elif protocol == str(6):
         print("sending tcp packet") # testing
         # NOTE: STEP 1 
-        # send to 3, attacker sniffs packer
+        # send to 3, attacker sniffs packet
         print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
         send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
+        print("Step 1 of TCP handshake done")
     else: 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

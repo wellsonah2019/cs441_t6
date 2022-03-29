@@ -53,9 +53,12 @@ def wrap_packet_ip(message, dest_ip, protocol):
     return packet
 print('packet received before while loop')
 
-# NOTE: TCP stuff
-def wrap_packet_tcp(message, dest_ip, protocol, start_time):
-    # SYN, ACK, SAK (SYN-ACK), RST
+# NOTE creates tcp packets to send
+def wrap_packet_tcp(
+    dest_ip, protocol, ctl=None, message="", 
+    seq = 1000, ack = None, special = 1
+):
+    # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
     IP_header = ""
     source_ip = IP
@@ -64,8 +67,11 @@ def wrap_packet_tcp(message, dest_ip, protocol, start_time):
     protocol = protocol
     data = message
     data_length = str(len(message))
-    tcp_type = 'something' # TODO: change 
-    start_time = start_time
+    ctl = ctl
+    seq = str(seq)
+    ack = str(ack)
+    window_size = "100"
+    special = str(special)
 
     if len(data_length) == 2:
         data_length = '0' + data_length
@@ -75,11 +81,26 @@ def wrap_packet_tcp(message, dest_ip, protocol, start_time):
     if dest_ip in local_arp_table:
         destination_mac = local_arp_table[dest_ip] 
     else:
-        destination_mac = 'R1'
+        destination_mac = 'R2'
+    # print(destination_mac)
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + tcp_type + protocol + data_length + data + start_time
+    packet = {
+        "ethernet_header": ethernet_header,
+        "IP_header": IP_header, 
+        "ctl": ctl, 
+        "protocol": protocol, 
+        "data_length": data_length, 
+        "data": data, 
+        "seq": seq, 
+        "ack": ack, 
+        "window_size": window_size, 
+        "special": special 
+    }
     
-    return packet
+    # ethernet_header + IP_header + ctl + protocol +\
+    #     data_length + data + seq + seq + window_size + special
+    
+    return json.dumps(packet)
 
 while True:
     print('packet received')

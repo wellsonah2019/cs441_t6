@@ -104,8 +104,21 @@ def wrap_packet_tcp(
         destination_mac = 'R2'
     # print(destination_mac)
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + ctl + protocol +\
-        data_length + data + seq + ack + window_size + special
+    packet = {
+        "ethernet_header": ethernet_header,
+        "IP_header": IP_header, 
+        "ctl": ctl, 
+        "protocol": protocol, 
+        "data_length": data_length, 
+        "data": data, 
+        "seq": seq, 
+        "ack": ack, 
+        "window_size": window_size, 
+        "special": special 
+    }
+    
+    # ethernet_header + IP_header + ctl + protocol +\
+    #     data_length + data + seq + seq + window_size + special
     
     return json.dumps(packet)
 

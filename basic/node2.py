@@ -191,6 +191,7 @@ while True:
         # send to 3, attacker sniffs packer
         print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
         send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
+        
     else: 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

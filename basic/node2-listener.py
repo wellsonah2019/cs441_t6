@@ -23,6 +23,10 @@ def reply_ping(packet):
     node2.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     node2.sendto(bytes(packet, "utf-8"), ("localhost", 8033))
 
+def reply_synack(packet):
+    node2.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
+    node2.sendto(bytes(packet, "utf-8"), ("localhost", 8006))
+
 def log_protocol(source_ip, source_mac, message):
     with open('node2.log', 'a') as file:
         file.write("\nSOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
@@ -210,6 +214,7 @@ while True:
             if tcp_control_flag:
                 if tcp_control_flag == "SAK":
                     print("\nTCP Control Flag: SYN-ACK")
+                    reply_synack(wrap_packet_ip(ip_source, "6", "ACK"))
                 else:
                     print("\nTCP Control Flag: " + tcp_control_flag)
             print("\nSeq: " + seq)

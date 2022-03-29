@@ -145,6 +145,6 @@ while True:
             fake_ip = input("Do not include spaces! Please insert your fake ip: ")
         message = "{} has IP {}".format(MAC, fake_ip)
         send_local(wrap_packet_ip(message, dest_ip, protocol))
-    else: 
+    elif protocol == str(2): 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

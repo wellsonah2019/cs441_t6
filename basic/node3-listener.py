@@ -110,7 +110,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     
     return packet
  
- 
+is_tcp = False
 while True:
     received_message, address = node3.recvfrom(1024)
     if received_message:

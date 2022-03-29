@@ -55,7 +55,6 @@ def wrap_packet_ip(message, dest_ip, protocol):
     protocol = protocol
     data = message
     data_length = str(len(message))
-    ping_type = 'req'
 
     if len(data_length) == 2:
         data_length = '0' + data_length
@@ -68,7 +67,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
         destination_mac = 'R2'
     # print(destination_mac)
     ethernet_header = ethernet_header + source_mac + destination_mac
-    packet = ethernet_header + IP_header + ping_type + protocol + data_length + data
+    packet = ethernet_header + IP_header + protocol + data_length + data
     
     return packet
 
@@ -192,7 +191,7 @@ while True:
         print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
         send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
         print("Step 1 of TCP handshake done")
-    else: 
+    elif protocol == str(2): 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))
     

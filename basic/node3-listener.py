@@ -317,11 +317,23 @@ while True:
                     print("sending " + to_send)
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
-                    print("Step 2 of TCP handshake done!")
+                    print("Step 4 of TCP handshake done!")
                 # NOTE step 3 of attack
                 elif str(special).strip() == "3":
                     pass
                     # TODO 
+
+                # NOTE step 6 of TCP connection
+                print("special is ", special)
+                if str(special).strip() == "4": 
+                    to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=200, ack=1001, special=6)
+                    print("sending " + to_send)
+                    # node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
+                    node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
+                    print("Step 6 of TCP handshake done!")
+                elif str(special).strip() == "5":
+                    pass
+
         elif destination_ip != IP and MAC == destination_mac:
             print("ARP-POISONED PACKET RECEIVED...")
             print("-----------" + timestamp() + "-----------")

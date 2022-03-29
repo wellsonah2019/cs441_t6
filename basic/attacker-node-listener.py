@@ -171,3 +171,19 @@ while True:
         print("sending " + to_send)
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
         print("Starting new handshake with node 3....")
+
+    # NOTE step 7 of TCP connection
+    print("special is ", special)
+    if str(special).strip() == "6": 
+        to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7)
+        print("sending " + to_send)
+        node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
+        print("Step 7 of TCP handshake done!")
+
+    # NOTE step 8 of TCP connection
+    print("special is ", special)
+    if str(special).strip() == "5":
+        to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8)
+        print("sending " + to_send)
+        node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
+        print("Step 8 of TCP handshake done!")

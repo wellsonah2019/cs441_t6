@@ -1,5 +1,5 @@
 # How to Run the Project
-**Note: This project can only run in ubuntu console**
+**Note: Please run this project in ubuntu console**
 ## Basic Network Emulation
 1. Clone the project to ubuntu home
 2. Open ubuntu console and install python-is-python3:

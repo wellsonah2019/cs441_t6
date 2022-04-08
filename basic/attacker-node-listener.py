@@ -137,6 +137,7 @@ while True:
         special = received_message["special"]
         ethernet_header = received_message["ethernet_header"]
         source_mac = ethernet_header[0:2]
+        destination_mac = ethernet_header[2:4]
         ip_header = received_message["IP_header"]
         ip_source = ip_header[0:4]
         destination_ip = ip_header[4:8]
@@ -169,31 +170,34 @@ while True:
     print("special is ", special)
     if str(special).strip() == "2": 
         to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Resetting TCP connection... muahahaha!")
+        print("[!] Resetting TCP connection... muahahaha!")
 
         to_send = wrap_packet_tcp("0x2B", "6", "SYN", seq=1000, special=4)
-        print("sending " + to_send)
+        # print("sending " + to_send)
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Starting new handshake with node 3....")
+        print("[!] Starting new handshake with node 3....")
 
     # NOTE step 7 of MITM
     print("special is ", special)
     if str(special).strip() == "6": 
         to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Step 7 of TCP handshake done!")
+        # print("Step 7 of TCP handshake done!")
 
     # NOTE LAST STEP, step 8 of MITM
     print("special is ", special)
     if str(special).strip() == "5":
         print(post_exploit_state)
         to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
-        print("Step 8 of TCP handshake done!")
+        # print("Step 8 of TCP handshake done!")
         sleep(0.1)
         post_exploit_state.changestate("1")
-        print(post_exploit_state)
+        # print(post_exploit_state)

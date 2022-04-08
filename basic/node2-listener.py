@@ -164,10 +164,10 @@ while True:
             message = received_message[16:end_pos]
             protocol = int(protocol)
     # NOTE: for testing only
-    print("IP", IP)
-    print("dest ip", destination_ip)
-    print("MAC", MAC)
-    print("dest mac", destination_mac)
+    # print("IP", IP)
+    # print("dest ip", destination_ip)
+    # print("MAC", MAC)
+    # print("dest mac", destination_mac)
 
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
@@ -248,14 +248,15 @@ while True:
             print("----------------------------------")
 
             # NOTE step 5 of TCP connection
-            print("special is ", special)
+            # print("special is ", special)
             if str(special).strip() == "2": 
                 sleep(0.1) # gimmick way of making this appear later. probably need to change this
                 to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=21, ack=51, special=5)
-                print("sending " + to_send)
+                # print("sending " + to_send)
+                input("Press Enter to continue...")
                 node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
                 node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
-                print("Step 5 of TCP handshake done!")
+                # print("Step 5 of TCP handshake done!")
             # NOTE step 3 of attack
             elif str(special).strip() == "3":
                 pass

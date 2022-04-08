@@ -243,7 +243,8 @@ while True:
             # send to 3, attacker sniffs packet
             print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
             send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
-            print("Step 1 of TCP handshake done")
+            # print("Step 1 of TCP handshake done")
+            input()
         else:
             # NOTE post-exploit
             print("Post exploit reached.")

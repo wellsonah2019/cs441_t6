@@ -128,7 +128,7 @@ while True:
         # protocols = ["SYN", "ACK", "SAK", "RST"]
         # check if it is a byte string
         if "{" in received_message and "}" in received_message:
-            print("node 3 received tcp")
+            # print("node 3 received tcp")
             # tcp_control_flag = received_message[12:15]
             # protocol = received_message[15:16]
             # data_length = received_message[16:19]
@@ -204,10 +204,10 @@ while True:
         # print("firewall: " + str(firewall.getfwall()))
         
         # NOTE: for testing only
-        print("IP", IP)
-        print("dest ip", destination_ip)
-        print("MAC", MAC)
-        print("dest mac", destination_mac)
+        # print("IP", IP)
+        # print("dest ip", destination_ip)
+        # print("MAC", MAC)
+        # print("dest mac", destination_mac)
 
         # NOTE: FIREWALL
         if ip_source in firewall.getfwall():
@@ -230,9 +230,9 @@ while True:
         
         elif IP == destination_ip and MAC == destination_mac:
             # NOTE testing
-            print("test 3")
-            if is_tcp:
-                print("is tcp")
+            # print("test 3")
+            # if is_tcp:
+            #     print("is tcp")
 
             if protocol == 3:
                 print("-----------" + timestamp() + "-----------")
@@ -311,10 +311,11 @@ while True:
                 print("\nMessage: " + message)    
                 print("----------------------------------")
                 # NOTE step 2 of TCP connection
-                print("special is ", special)
+                # print("special is ", special)
                 if str(special).strip() == "1": 
                     to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=50, ack=int(seq)+1, special=2)
-                    print("sending " + to_send)
+                    # print("sending " + to_send)
+                    input("Press Enter to continue...")
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
                     print("Step 4 of TCP handshake done!")
@@ -327,10 +328,11 @@ while True:
                 print("special is ", special)
                 if str(special).strip() == "4": 
                     to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=200, ack=1001, special=6)
-                    print("sending " + to_send)
+                    # print("sending " + to_send)
                     # node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
+                    input("Press Enter to continue...")
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
-                    print("Step 6 of TCP handshake done!")
+                    # print("Step 6 of TCP handshake done!")
                 elif str(special).strip() == "5":
                     pass
 

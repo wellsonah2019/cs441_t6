@@ -321,7 +321,7 @@ while True:
                 # NOTE step 3 of attack
                 elif str(special).strip() == "3":
                     pass
-                    # TODO 
+                    # doesnt seem like this is needed...
 
                 # NOTE step 6 of TCP connection
                 print("special is ", special)

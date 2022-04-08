@@ -250,7 +250,7 @@ while True:
             # NOTE step 5 of TCP connection
             print("special is ", special)
             if str(special).strip() == "2": 
-                sleep(0.1)
+                sleep(0.1) # gimmick way of making this appear later. probably need to change this
                 to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=21, ack=51, special=5)
                 print("sending " + to_send)
                 node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))

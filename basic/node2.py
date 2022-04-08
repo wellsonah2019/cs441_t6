@@ -18,7 +18,7 @@ def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102)) # router
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8006))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8006)) # attacker
 
 def wrap_packet_ping(message, dest_ip, protocol, start_time):
     ethernet_header = ""

@@ -9,6 +9,9 @@ import json
 from post import post_exploit_state
 from time import sleep
 
+# ensure that post exploit state is reset to 0
+post_exploit_state.resetstate() 
+
 extProc = sp.Popen(['python','attacker-node.py']) # runs myPyScript.py 
 
 status = sp.Popen.poll(extProc) # status should be 'None'

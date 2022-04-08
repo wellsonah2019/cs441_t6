@@ -315,7 +315,7 @@ while True:
                 if str(special).strip() == "1": 
                     to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=50, ack=int(seq)+1, special=2)
                     # print("sending " + to_send)
-                    input("Press Enter to continue...")
+                    # input("Press Enter to continue...")
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
                     print("Step 4 of TCP handshake done!")
@@ -330,7 +330,7 @@ while True:
                     to_send = wrap_packet_tcp("0x2A", "6", "SAK", seq=200, ack=1001, special=6)
                     # print("sending " + to_send)
                     # node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
-                    input("Press Enter to continue...")
+                    # input("Press Enter to continue...")
                     node3.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
                     # print("Step 6 of TCP handshake done!")
                 elif str(special).strip() == "5":

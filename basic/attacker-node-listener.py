@@ -171,7 +171,7 @@ while True:
     if str(special).strip() == "2": 
         to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3)
         # print("sending " + to_send)
-        input("Press Enter to continue...")
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
         print("[!] Resetting TCP connection... muahahaha!")
 
@@ -185,7 +185,7 @@ while True:
     if str(special).strip() == "6": 
         to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7)
         # print("sending " + to_send)
-        input("Press Enter to continue...")
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
         # print("Step 7 of TCP handshake done!")
 
@@ -195,7 +195,7 @@ while True:
         print(post_exploit_state)
         to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8)
         # print("sending " + to_send)
-        input("Press Enter to continue...")
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
         # print("Step 8 of TCP handshake done!")
         sleep(0.1)

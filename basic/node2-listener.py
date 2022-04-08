@@ -253,7 +253,7 @@ while True:
                 sleep(0.1) # gimmick way of making this appear later. probably need to change this
                 to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=21, ack=51, special=5)
                 # print("sending " + to_send)
-                input("Press Enter to continue...")
+                # input("Press Enter to continue...")
                 node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
                 node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8006))
                 # print("Step 5 of TCP handshake done!")

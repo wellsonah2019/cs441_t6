@@ -3,6 +3,7 @@ from datetime import datetime
 from timestamp import date_time
 import firewall
 import json
+from post import post_exploit_state
 # import pickle
 
 IP = '0x2B'
@@ -40,6 +41,8 @@ def wrap_packet_ping(message, dest_ip, protocol, start_time):
 
     if dest_ip in local_arp_table:
         destination_mac = local_arp_table[dest_ip] 
+    elif dest_ip == "0x3A":
+        destination_mac = "N9"
     else:
         destination_mac = 'R2'
     # print(destination_mac)
@@ -200,4 +203,10 @@ while True:
         elif protocol == str(2): 
             message = ''
             send_local(wrap_packet_ip(message, dest_ip, protocol))
+        elif protocol == str(6):
+            if post_exploit_state.getstate() == "0":
+                print("you shouldn't be here")
+            else:
+                # NOTE post-exploit
+                print("Post exploit reached.")
     

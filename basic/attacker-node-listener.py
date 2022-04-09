@@ -6,14 +6,19 @@ from datetime import datetime
 import json
 # from collections.abc import Mapping
 # import pickle
+from post import post_exploit_state
+from time import sleep
+
+# ensure that post exploit state is reset to 0
+post_exploit_state.resetstate() 
 
 extProc = sp.Popen(['python','attacker-node.py']) # runs myPyScript.py 
 
 status = sp.Popen.poll(extProc) # status should be 'None'
-IP = '0x2A'
-MAC = 'N2'
+IP = '0x3A'
+MAC = 'N9'
 
-local_arp_table = json.loads(open('arp-table-node2.json', 'r').read())
+local_arp_table = json.loads(open('arp-table-attacker.json', 'r').read())
 
 # cable = ("localhost", 8200) 
 node2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -78,6 +83,7 @@ def wrap_packet_tcp(
         data_length = '00' + data_length
 
     if dest_ip in local_arp_table:
+        print("dest ip in local arp table")
         destination_mac = local_arp_table[dest_ip] 
     else:
         destination_mac = 'R2'
@@ -131,6 +137,7 @@ while True:
         special = received_message["special"]
         ethernet_header = received_message["ethernet_header"]
         source_mac = ethernet_header[0:2]
+        destination_mac = ethernet_header[2:4]
         ip_header = received_message["IP_header"]
         ip_source = ip_header[0:4]
         destination_ip = ip_header[4:8]
@@ -163,27 +170,34 @@ while True:
     print("special is ", special)
     if str(special).strip() == "2": 
         to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Resetting TCP connection... muahahaha!")
+        print("[!] Resetting TCP connection... muahahaha!")
 
         to_send = wrap_packet_tcp("0x2B", "6", "SYN", seq=1000, special=4)
-        print("sending " + to_send)
+        # print("sending " + to_send)
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Starting new handshake with node 3....")
+        print("[!] Starting new handshake with node 3....")
 
-    # NOTE step 7 of TCP connection
+    # NOTE step 7 of MITM
     print("special is ", special)
     if str(special).strip() == "6": 
         to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
-        print("Step 7 of TCP handshake done!")
+        # print("Step 7 of TCP handshake done!")
 
-    # NOTE step 8 of TCP connection
+    # NOTE LAST STEP, step 8 of MITM
     print("special is ", special)
     if str(special).strip() == "5":
+        print(post_exploit_state)
         to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8)
-        print("sending " + to_send)
+        # print("sending " + to_send)
+        # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
-        print("Step 8 of TCP handshake done!")
+        # print("Step 8 of TCP handshake done!")
+        sleep(0.1)
+        post_exploit_state.changestate("1")
+        # print(post_exploit_state)

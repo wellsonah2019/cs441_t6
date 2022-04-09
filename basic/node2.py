@@ -3,6 +3,7 @@ from datetime import datetime
 from timestamp import date_time
 import json
 # import pickle
+from post import post_exploit_state
 
 IP = '0x2A'
 MAC = 'N2'
@@ -17,7 +18,7 @@ def send_local(packet):
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8102)) # router
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
     server.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
-    server.sendto(bytes(packet, "utf-8"), ("localhost", 8006))
+    server.sendto(bytes(packet, "utf-8"), ("localhost", 8006)) # attacker
 
 def wrap_packet_ping(message, dest_ip, protocol, start_time):
     ethernet_header = ""
@@ -120,6 +121,55 @@ def wrap_packet_tcp(
     
     return json.dumps(packet)
 
+def wrap_packet_tcp_post(
+    protocol, ctl=None, message="", 
+    seq = 20, ack = None, special = 1
+):
+    # special is to indicate the step of the attack, starting from 1
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+    ctl = ctl
+    seq = str(seq)
+    ack = str(ack)
+    window_size = "100"
+    special = str(special)
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip]
+    elif dest_ip == "0x3A":
+        destination_mac = "N9"
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = {
+        "ethernet_header": ethernet_header,
+        "IP_header": IP_header, 
+        "ctl": ctl, 
+        "protocol": protocol, 
+        "data_length": data_length, 
+        "data": data, 
+        "seq": seq, 
+        "ack": ack, 
+        "window_size": window_size, 
+        "special": special 
+    }
+    
+    # ethernet_header + IP_header + ctl + protocol +\
+    #     data_length + data + seq + seq + window_size + special
+    
+    return json.dumps(packet)
 
 while True:
     protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection \n")
@@ -185,12 +235,20 @@ while True:
         message = "{} has IP {}".format(MAC, fake_ip)
         send_local(wrap_packet_ip(message, dest_ip, protocol))
     elif protocol == str(6):
-        print("sending tcp packet") # testing
-        # NOTE: STEP 1 
-        # send to 3, attacker sniffs packet
-        print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
-        send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
-        print("Step 1 of TCP handshake done")
+
+        print("post exploit state = " + post_exploit_state.__str__())
+        if post_exploit_state.getstate() == "0":
+            print("sending tcp packet") # testing
+            # NOTE: STEP 1 
+            # send to 3, attacker sniffs packet
+            print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
+            send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
+            # print("Step 1 of TCP handshake done")
+            input()
+        else:
+            # NOTE post-exploit
+            print("Post exploit reached.")
+
     elif protocol == str(2): 
         message = ''
         send_local(wrap_packet_ip(message, dest_ip, protocol))

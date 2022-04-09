@@ -1,6 +1,7 @@
 from ctypes import addressof
 import socket
 import sys
+from timestamp import timestamp
 
 IP = '0x21'
 MAC = 'R2'
@@ -8,6 +9,9 @@ MAC = 'R2'
 connected_to_me = {
     "0x2A": "N2",
     "0x2B": "N3",
+}
+
+other_router_nic = {
     "0x11": "R1"
 }
 
@@ -109,6 +113,13 @@ while True:
             else:
                 server.sendto(bytes(wrap_packet_ip(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8101))
         elif protocol == 1:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=source_ip, destination_ip=destination_ip))
+            print("\nProtocol: Log")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
             log_protocol(source_ip, source_mac, message)
         elif protocol == 2:
             print("Kill protocol has been given. Will exit now...")
@@ -150,7 +161,7 @@ while True:
         received_message = [char for char in received_message]
         received_message[0] = 'R'
         received_message[1] = '2'
-        received_message[2:4] = [char for char in connected_to_me['0x11']]
+        received_message[2:4] = [char for char in other_router_nic['0x11']]
         received_message = ''.join(received_message)      
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
 

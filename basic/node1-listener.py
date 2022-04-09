@@ -101,7 +101,7 @@ while True:
             print("\nMessage: " + message)
             print("----------------------------------")
             total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
-            print("Ping successful: ", total.total_seconds() * 1000)
+            print("Ping successful: " + str(round(total.total_seconds() * 1000, 2)) + "ms")
             # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
             print(message)

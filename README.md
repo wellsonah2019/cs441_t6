@@ -1,6 +1,6 @@
 # How to Run the Project
 **Note: Please run this project in ubuntu console**
-## Basic Network Emulation
+## 1. Basic Network Emulation
 1. Clone the project to ubuntu home
 2. Open ubuntu console and install python-is-python3:
     ```
@@ -74,8 +74,8 @@
 
     ### Simple Messaging
     
-## IP Spoofing
+## 2. IP Spoofing
 
-## ARP Poisoning
+## 3. ARP Poisoning
 
-## TCP Session Hijacking MITM
+## 4. TCP Session Hijacking MITM

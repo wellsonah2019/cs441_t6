@@ -8,6 +8,7 @@ import json
 # from collections.abc import Mapping
 # import pickle
 from time import sleep
+from post import post_exploit_state
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
@@ -296,6 +297,7 @@ while True:
                     print("Failed to restart sender node...")
                     print("Please restart manually")
                     print()
+                
             elif str(protocol) == "6":
                 print("-----------" + timestamp() + "-----------")
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -310,6 +312,8 @@ while True:
                 print("\nSeq: " + seq)
                 print("\nAck: " + ack)
                 print("\nMessage: " + message)    
+                if post_exploit_state.getstate() != "0":
+                    print("[!] Invalid TCP Packet, Packet has been dropped.") 
                 print("----------------------------------")
                 # NOTE step 2 of TCP connection
                 # print("special is ", special)

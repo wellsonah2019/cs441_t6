@@ -1,6 +1,8 @@
 import socket
 import sys 
 import subprocess as sp
+
+from numpy import source
 from timestamp import timestamp
 from datetime import datetime
 import json
@@ -60,14 +62,14 @@ print('packet received before while loop')
 
 def wrap_packet_tcp(
     dest_ip, protocol, ctl=None, message="", 
-    seq = 20, ack = None, special = 1
+    seq = 20, ack = None, special = 1, source_ip=IP, source_mac=MAC
 ):
     # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
     IP_header = ""
-    source_ip = IP
+    source_ip = source_ip
     IP_header = IP_header + source_ip + dest_ip
-    source_mac = MAC
+    source_mac = source_mac
     protocol = protocol
     data = message
     data_length = str(len(message))
@@ -169,13 +171,13 @@ while True:
 
     print("special is ", special)
     if str(special).strip() == "2": 
-        to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3)
+        to_send = wrap_packet_tcp("0x2B", "6", "RST", seq=21, special=3, source_ip="0x2A", source_mac="N2")
         # print("sending " + to_send)
         # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
         print("[!] Resetting TCP connection... muahahaha!")
 
-        to_send = wrap_packet_tcp("0x2B", "6", "SYN", seq=1000, special=4)
+        to_send = wrap_packet_tcp("0x2B", "6", "SYN", seq=1000, special=4, source_ip="0x2A", source_mac="N2")
         # print("sending " + to_send)
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
         print("[!] Starting new handshake with node 3....")
@@ -183,7 +185,7 @@ while True:
     # NOTE step 7 of MITM
     print("special is ", special)
     if str(special).strip() == "6": 
-        to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7)
+        to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=1001, ack=201, special=7, source_ip="0x2A", source_mac="N2")
         # print("sending " + to_send)
         # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8003))
@@ -193,11 +195,11 @@ while True:
     print("special is ", special)
     if str(special).strip() == "5":
         print(post_exploit_state)
-        to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8)
+        to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=51, ack=22, special=8, source_ip="0x2B", source_mac="N3")
         # print("sending " + to_send)
         # input("Press Enter to continue...")
         node2.sendto(bytes(to_send, "utf-8"), ("localhost", 8002))
         # print("Step 8 of TCP handshake done!")
-        sleep(0.1)
+        sleep(0.2)
         post_exploit_state.changestate("1")
         # print(post_exploit_state)

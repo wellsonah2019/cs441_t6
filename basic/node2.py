@@ -4,6 +4,7 @@ from timestamp import date_time
 import json
 # import pickle
 from post import post_exploit_state
+from postexploit import poste
 
 IP = '0x2A'
 MAC = 'N2'
@@ -244,10 +245,13 @@ while True:
             print("sending packet " + wrap_packet_tcp(dest_ip, "6", "SYN"))
             send_local(wrap_packet_tcp(dest_ip, "6", "SYN"))
             # print("Step 1 of TCP handshake done")
-            input()
+            # input()
         else:
-            # NOTE post-exploit
-            print("Post exploit reached.")
+            msg = input("Enter message please: ")
+            seq3 = poste.getseq3()
+            length = len()
+            wrap_packet_tcp("0x2B", "6", "ACK", message=msg, )
+
 
     elif protocol == str(2): 
         message = ''

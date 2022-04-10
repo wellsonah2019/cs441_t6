@@ -1,6 +1,8 @@
 from ctypes import addressof
 import socket
 import sys
+from timestamp import timestamp
+from datetime import datetime
 
 IP = '0x21'
 MAC = 'R2'
@@ -8,6 +10,9 @@ MAC = 'R2'
 connected_to_me = {
     "0x2A": "N2",
     "0x2B": "N3",
+}
+
+other_router_nic = {
     "0x11": "R1"
 }
 
@@ -26,6 +31,31 @@ router1.bind(("localhost", 8102))
 def log_protocol(source_ip, source_mac, message):
     with open('router-nic2.log', 'a') as file:
         file.write("SOURCE IP: " + source_ip + '\nSOURCE MAC: ' + source_mac + '\n' + 'MESSAGE: ' + message + '\n\n')
+
+def wrap_packet_ping(message, dest_ip, protocol):
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+    ping_type = 'rep'
+
+    if len(data_length) == 2:
+        data_length = '0' + str(data_length)
+    elif len(data_length) == 1:
+        data_length = '00' + str(data_length)
+
+    if dest_ip in connected_to_me:
+        destination_mac = connected_to_me[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + ping_type + protocol + str(data_length) + data
+    
+    return packet
 
 def wrap_packet_ip(message, dest_ip, protocol):
     ethernet_header = ""
@@ -95,7 +125,7 @@ while True:
         print("\nData Length: " + str(data_length))
         print("\nMessage: " + message)    
         print()
-        print("PACKET NOT FOR ME. ROUTING NOW...")
+        print("PACKET NOT FOR ME.")
     if IP == destination_ip and MAC == destination_mac:
         if protocol == 3:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -103,12 +133,31 @@ while True:
             print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)
         elif protocol == 0:
-            print("RECEIVED PING REQUEST... \nREPLYING NOW...")
+            print("RECEIVED PING REQUEST...")
+            end = datetime.now()
+            print(end)
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
+            print("\nProtocol: Ping")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
+            total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
+            print("Ping successful: " + str(round(total.total_seconds() * 1000, 2)) + "ms")
+            print("REPLYING NOW...")
             if source_ip[2] == '2':
-                reply_ping(wrap_packet_ip(message, source_ip, str(protocol)))
+                reply_ping(wrap_packet_ping(message, source_ip, str(protocol)))
             else:
-                server.sendto(bytes(wrap_packet_ip(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8101))
+                server.sendto(bytes(wrap_packet_ping(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8101))
         elif protocol == 1:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=source_ip, destination_ip=destination_ip))
+            print("\nProtocol: Log")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
             log_protocol(source_ip, source_mac, message)
         elif protocol == 2:
             print("Kill protocol has been given. Will exit now...")
@@ -150,7 +199,7 @@ while True:
         received_message = [char for char in received_message]
         received_message[0] = 'R'
         received_message[1] = '2'
-        received_message[2:4] = [char for char in connected_to_me['0x11']]
+        received_message[2:4] = [char for char in other_router_nic['0x11']]
         received_message = ''.join(received_message)      
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
 

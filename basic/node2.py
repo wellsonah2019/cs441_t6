@@ -6,6 +6,8 @@ import json
 from post import post_exploit_state
 from postexploit import poste
 
+poste.resetall()
+
 IP = '0x2A'
 MAC = 'N2'
 
@@ -281,10 +283,13 @@ while True:
             # input()
         else:
             msg = input("Enter message please: ")
-            seq3 = poste.getseq3()
-            length = len()
-            wrap_packet_tcp("0x2B", "6", "ACK", message=msg, )
-
+            seq2 = poste.getseq2()
+            ack2 = poste.getack2()
+            length = len(msg)
+            to_send = wrap_packet_tcp("0x2B", "6", "ACK", message=msg, ack=int(ack2), seq=int(seq2)+length, special=69)
+            poste.setseq3(int(ack2))
+            poste.setack3(int(seq2)+length)
+            send_local(to_send)
 
     elif protocol == str(2): 
         message = ''

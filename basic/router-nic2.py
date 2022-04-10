@@ -127,7 +127,7 @@ while True:
         print()
         print("PACKET NOT FOR ME.")
     if IP == destination_ip and MAC == destination_mac:
-        if protocol == 3:
+        if protocol == 3 or protocol == 7:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
             print("\nData Length: " + str(data_length))
@@ -182,9 +182,16 @@ while True:
             if protocol == 0:
                 if ping_type == 'rep':
                     reply_ping(received_message)
+                    print(source_ip)
+                    if destination_ip[3] == 'A':
+                        print("NODE 2 SENT A PING PACKET")
+                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8003))
+                    elif destination_ip[3] == 'B':
+                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8002))
                 else:
                     send_local(received_message)
             else:
+                print("IP SPOOF GO HERE")
                 send_local(received_message)
             # print('received from outside network -- will pass to cable')
             # send_local(received_message)

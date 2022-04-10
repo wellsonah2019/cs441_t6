@@ -125,8 +125,33 @@ def wrap_packet_tcp(
     
     return json.dumps(packet)
 
+def wrap_packet_ip_spoof(message, dest_ip, protocol, source_ip):
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = source_ip
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + protocol + data_length + data
+    
+    return packet
+
 while True:
-    protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n0. Ping Protocol \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n4. Configure firewall \n5. ARP Poisoning\n")
+    protocol = input("[Node 3] \nPlease select what protocol you would like to use: \n0. Ping Protocol \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n4. Configure firewall \n5. ARP Poisoning\n7. IP SPOOFING\n")
 #   NOTE: firewall config
     if protocol == str(4):
         print("Current firewall configuration: ")
@@ -148,6 +173,14 @@ while True:
                 print("Message is too long")
                 message = input("Please insert the message you want to send: ")
             send_local(wrap_packet_ip(message, dest_ip, protocol))
+        elif protocol == str(7):
+            source_ip = input("FAKE IP TO SPOOF: ")
+            message = input("Please insert the message you want to send: ")
+            while len(message) > 256:
+                print()
+                print("Message is too long")
+                message = input("Please insert the message you want to send: ")
+            send_local(wrap_packet_ip_spoof(message, dest_ip, protocol, source_ip))
         elif protocol == str(0):
             message = input("Please insert the message you want to send: ")
             while len(message) > 256:

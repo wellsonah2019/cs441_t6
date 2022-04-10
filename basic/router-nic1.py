@@ -124,7 +124,7 @@ while True:
         print()
         print("PACKET NOT FOR ME.")
     if IP == destination_ip and MAC == destination_mac:
-        if protocol == 3:
+        if protocol == 3 or protocol == 7:
             print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {source_ip}, Destination IP address: {destination_ip}".format(source_ip=source_ip, destination_ip=destination_ip))
             print("\nData Length: " + str(data_length))

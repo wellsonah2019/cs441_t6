@@ -73,42 +73,30 @@ def wrap_packet_ip(message, dest_ip, protocol):
 
 
 while True:
-    protocol = input("[Node 4] \nPlease select what protocol you would like to use: \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n4. Configure firewall \n5. ARP Poisoning\n")
+    protocol = input("[Node 4] \nPlease select what protocol you would like to use: \n1. Log Protocol \n2. Kill Protocol \n3. Simple Messaging \n5. ARP Poisoning\n")
     ip = input("Enter the fake source IP: ")
     mac = input("Enter the fake source MAC: ")
 #   NOTE: firewall config
-    if protocol == str(4):
-        print("Current firewall configuration: ")
-        print("Blocked IPs: {}".format(str(firewall.getfwall())))
-        ip_to_block = input("Please enter the IP address to be blocked, or [exit]: ")
-        if ip_to_block == "exit":
-            print("Exited firewall configuration!")
-        elif ip_to_block not in firewall.getfwall():
-            firewall.writefwall(ip_to_block)
-            print("{} is now blocked!".format(ip_to_block))
-        else:
-            print("{} is already blocked!".format(ip_to_block))
-    else:
-        dest_ip = input("Please insert the destination: ")
-        if protocol == str(3):
-            message = input("Please insert the message you want to send: ")
-            while len(message) > 256:
-                print()
-                print("Message is too long")
-                message = input("Please insert the message you want to send: ")
-            send_local(wrap_packet_ip(message, dest_ip, protocol))
-        
-        elif protocol == str(1):
-            log_message = input("Please insert the log details: ")
-            log_message = str(date_time()) + " " + log_message
-            send_local(wrap_packet_ip(log_message, dest_ip, protocol))
-        elif protocol == str(5):
-            fake_ip = input("Please insert your fake IP: ")
-            if " " in fake_ip:
-                fake_ip = input("Do not include spaces! Please insert your fake ip: ")
-            message = "{} has IP {}".format(mac, fake_ip)
-            send_local(wrap_packet_ip(message, dest_ip, protocol))
-        elif protocol == str(2): 
-            message = ''
-            send_local(wrap_packet_ip(message, dest_ip, protocol))
     
+    dest_ip = input("Please insert the destination: ")
+    if protocol == str(3):
+        message = input("Please insert the message you want to send: ")
+        while len(message) > 256:
+            print()
+            print("Message is too long")
+            message = input("Please insert the message you want to send: ")
+        send_local(wrap_packet_ip(message, dest_ip, protocol))
+    
+    elif protocol == str(1):
+        log_message = input("Please insert the log details: ")
+        log_message = str(date_time()) + " " + log_message
+        send_local(wrap_packet_ip(log_message, dest_ip, protocol))
+    elif protocol == str(5):
+        fake_ip = input("Please insert fake ARP TABLE IP: ")
+        if " " in fake_ip:
+            fake_ip = input("Do not include spaces! Please insert fake ARP TABLE ip: ")
+        message = "{} has IP {}".format(mac, fake_ip)
+        send_local(wrap_packet_ip(message, dest_ip, protocol))
+    elif protocol == str(2): 
+        message = ''
+        send_local(wrap_packet_ip(message, dest_ip, protocol))

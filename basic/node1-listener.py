@@ -82,7 +82,7 @@ while True:
         message = received_message[16:end_pos]
         protocol = int(protocol)
     if IP == destination_ip and MAC == destination_mac:
-        if protocol == 3:
+        if protocol == 3 or protocol == 7:
             print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))

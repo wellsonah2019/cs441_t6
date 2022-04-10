@@ -170,7 +170,7 @@ while True:
     # print("dest mac", destination_mac)
 
     if IP == destination_ip and MAC == destination_mac:
-        if protocol == 3:
+        if protocol == 3 or protocol == 7:
             print("-----------" + timestamp() + "-----------")
             print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
             print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
@@ -192,6 +192,7 @@ while True:
             print("Ping successful: ", total.total_seconds() * 1000)
             # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
+            node2.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8003))
             # print(message)
         elif protocol == 1:
             print("-----------" + timestamp() + "-----------")

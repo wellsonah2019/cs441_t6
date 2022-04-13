@@ -148,6 +148,14 @@ while True:
             print("REPLYING NOW...")
             if source_ip[2] == '2':
                 reply_ping(wrap_packet_ping(message, source_ip, str(protocol)))
+                # if node 2:
+                #   send to node 3
+                # if node 3:
+                #   send to node 2
+                if source_ip == '0x2A':
+                    server.sendto(bytes(wrap_packet_ping(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8003))
+                elif source_ip == '0x2B':
+                    server.sendto(bytes(wrap_packet_ping(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8002))
             else:
                 server.sendto(bytes(wrap_packet_ping(message, source_ip, str(protocol)), "utf-8"), ("localhost", 8101))
         elif protocol == 1:
@@ -182,7 +190,6 @@ while True:
             if protocol == 0:
                 if ping_type == 'rep':
                     reply_ping(received_message)
-                    print(source_ip)
                     if destination_ip[3] == 'A':
                         print("NODE 2 SENT A PING PACKET")
                         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8003))

@@ -167,6 +167,7 @@ while True:
             message = received_message[19:end_pos]
             protocol = int(protocol)
             start_time = received_message[end_pos:]
+            print("HERE", start_time)
         else:
             protocol = received_message[12:13]
             data_length = int(received_message[13:16])
@@ -199,11 +200,13 @@ while True:
             print("\nData Length: " + str(data_length))
             print("\nMessage: " + message)
             print("----------------------------------")
+            print(start_time)
             total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
             print("Ping successful: ", total.total_seconds() * 1000)
             # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
             reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
-            node2.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8003))
+            if ip_source not in local_arp_table:
+                node2.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8003))
             # print(message)
         elif protocol == 1:
             print("-----------" + timestamp() + "-----------")

@@ -230,7 +230,10 @@ while True:
         server.settimeout(10)
         ip_source = ""
         try:
+            print("this should get printed")
             received_message, addr = server.recvfrom(1024)
+            print(received_message)
+            print("this sohuld not get printed")
             end = datetime.now()
             received_message = received_message.decode("utf-8")
             source_mac = received_message[0:2]

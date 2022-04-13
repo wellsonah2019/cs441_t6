@@ -19,7 +19,7 @@
     python router-nic2.py
     ```
     ### Ping Protocol Example (Node 1 Ping Node 3)
-    **Note: Ping Protocol can ping all 3 nodes and router**  
+    **Note: Ping Protocol works for all 3 nodes and router**  
     a. Input 0 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
     [Node 1]
@@ -206,6 +206,7 @@
     ```
 
     ### Log Protocol (Node 1 to Node 3 Log Protocol)
+    **Note: Log Protocol works for all 3 nodes and router** 
     a. Input 1 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
     [Node 1]
@@ -315,8 +316,109 @@
     ```
 
 
-    ### Kill Protocol
+    ### Kill Protocol (Node 1 Kill Node 2)
+    **Note: Kill Protocol works for all 3 nodes and router**  
+    a. Input 2 in the console where node1-listener.py is run and press Enter to choose Kill Protocol
+    ```
+    [Node 1]
+    Please select what protocol you would like to use:
+    0. Ping Protocol
+    1. Log Protocol
+    2. Kill Protocol
+    3. Simple Messaging
+    5. ARP Poisoning
+    7. IP SPOOFING
+    2
+    ```
+    
+    b. Insert the destination (Node 2's IP address) and press Enter
+    ```
+    Please insert the destination: 0x2A
+    ```
 
+    Node 2 Console (Node 2 has been successfully killed)
+    ```
+    ----------- [15:10:19] -----------
+
+    The packet received:
+    Source MAC address: R2, Destination MAC address: N2
+
+    Source IP address: 0x1A, Destination IP address: 0x2A
+
+    Protocol: Kill
+
+    Data Length: 0
+
+    Message:
+    ----------------------------------
+    Kill protocol has been given. Will exit now...
+    jesst@DESKTOP-0PJ69ED:~/network-simulator/cs441_t6/basic$
+    ```
+    (This part is not confirmed)  
+    Node 3 Console
+    ```
+    ----------- [15:10:19] -----------
+
+    The packet received:
+    Source MAC address: R2, Destination MAC address: N2
+
+    Source IP address: 0x1A, Destination IP address: 0x2A
+
+    Protocol: 2
+
+    Data Length: 0
+
+    Message:
+
+    PACKET NOT FOR ME. DROPPING NOW...
+    ----------------------------------
+    ```
+
+    Router 1 Console
+    ```
+    The packed received:
+    Source MAC address: N1, Destination MAC address: R1
+
+    Source IP address: 0x1A, Destination IP address: 0x2A
+
+    Protocl: 2
+
+    Data Length: 0
+
+    Message:
+
+    PACKET NOT FOR ME.
+    Packet received for destination outside network...
+    Forwarding to router-nic2...
+    CURRENT SOURCE MAC ADDRESS: N1
+    CURRENT DESTINATION MAC ADDRESS: R1
+    CHANGING SOURCE MAC ADDRESS TO R1...
+    CHANGING MAC ADDRESS TO R2...
+    ```
+
+    Router 2 Console
+    ```
+    The packed received:
+    Source MAC address: R1, Destination MAC address: R2
+
+    Source IP address: 0x1A, Destination IP address: 0x2A
+
+    Protocl: 2
+
+    Data Length: 0
+
+    Message:
+
+    PACKET NOT FOR ME.
+    Packet received for destination current network...
+    Forwading to current network...
+    CURRENT SOURCE MAC ADDRESS: R1
+    CURRENT DESTINATION MAC ADDRESS: R2
+    CHANGING SOURCE MAC ADDRESS TO R2...
+    CHANGING MAC ADDRESS TO N2...
+    IP SPOOF GO HERE
+    ```
+    
     ### Simple Messaging
     
     ### IP Filter/Firewall

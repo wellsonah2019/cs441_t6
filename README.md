@@ -1,7 +1,7 @@
 # How to Run the Project
 **Note: Please run this project in ubuntu console**
 ## 1. Basic Network Emulation
-1. Clone the project to ubuntu home
+1. Clone the project to ubuntu home -- git clone https://github.com/wellsonah2019/cs441_t6.git
 2. Open ubuntu console and install python-is-python3:
     ```
     sudo apt-get install python-is-python3 -y
@@ -11,12 +11,12 @@
     cd ~/cs441_t6/basic
     python node1-listener.py
     ```
-4. Run the other python files in separate ubuntu console:
+4. Run the other python files in separate ubuntu consoles:
     ```
     python node2-listener.py
     python node3-listener.py
-    python route-nic1.py
-    python route-nic2.py
+    python router-nic1.py
+    python router-nic2.py
     ```
     ### Ping Protocol Example (Node 1 Ping Node 3)
     Node 1 Console
@@ -74,8 +74,10 @@
 
     ### Simple Messaging
     
-## 2. IP Spoofing
+    ### IP Filter/Firewall
+    
+    ### IP Spoofing
 
-## 3. ARP Poisoning
+## 2. ARP Poisoning
 
-## 4. TCP Session Hijacking MITM
+## 3. TCP Session Hijacking MITM

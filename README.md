@@ -81,7 +81,7 @@
     ----------------------------------
     ```
 
-    This part is not confirmed  
+    (This part is not confirmed)  
     Node 3 Console
     ```
     ----------- [14:36:44] -----------
@@ -231,6 +231,88 @@
 
     d. A node3.log log file would be created in the basic folder as shown below
     ![[alt text]](https://github.com/wellsonah2019/cs441_t6/blob/main/basic/images/node3_log.PNG)
+
+    Node 3 Console
+    ```
+    ----------- [14:46:34] -----------
+
+    The packet received:
+    Source MAC address: R2, Destination MAC address: N3
+
+    Source IP address: 0x1A, Destination IP address: 0x2B
+
+    Protocol: Log
+
+    Data Length: 57
+
+    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
+    ----------------------------------
+    Successfully written to log file!
+    ```
+
+    (This part is not confirmed)  
+    Node 2 Console
+    ```
+    ----------- [14:46:34] -----------
+
+    The packet received:
+    Source MAC address: R2, Destination MAC address: N3
+
+    Source IP address: 0x1A, Destination IP address: 0x2B
+
+    Protocol: 1
+
+    Data Length: 57
+
+    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
+
+    PACKET NOT FOR ME. DROPPING NOW...
+    ----------------------------------
+    packet received
+    ```
+    Router 1 Console
+    ```
+    The packed received:
+    Source MAC address: N1, Destination MAC address: R1
+
+    Source IP address: 0x1A, Destination IP address: 0x2B
+
+    Protocl: 1
+
+    Data Length: 57
+
+    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
+
+    PACKET NOT FOR ME.
+    Packet received for destination outside network...
+    Forwarding to router-nic2...
+    CURRENT SOURCE MAC ADDRESS: N1
+    CURRENT DESTINATION MAC ADDRESS: R1
+    CHANGING SOURCE MAC ADDRESS TO R1...
+    CHANGING MAC ADDRESS TO R2...
+    ```
+    Router 2 Console
+    ```
+    The packed received:
+    Source MAC address: R1, Destination MAC address: R2
+
+    Source IP address: 0x1A, Destination IP address: 0x2B
+
+    Protocl: 1
+
+    Data Length: 57
+
+    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
+
+    PACKET NOT FOR ME.
+    Packet received for destination current network...
+    Forwading to current network...
+    CURRENT SOURCE MAC ADDRESS: R1
+    CURRENT DESTINATION MAC ADDRESS: R2
+    CHANGING SOURCE MAC ADDRESS TO R2...
+    CHANGING MAC ADDRESS TO N3...
+    IP SPOOF GO HERE
+    ```
 
 
     ### Kill Protocol

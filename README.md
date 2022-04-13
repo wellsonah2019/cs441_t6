@@ -229,8 +229,8 @@
     Please insert the log details: Hi node 3, I'm node 1 (Log Protocol)
     ```
 
-    d. A node3.log log file would be created in the basic folder
-    ![[alt text]](/images/node3_log.PNG)
+    d. A node3.log log file would be created in the basic folder as shown below
+    ![[alt text]](https://github.com/wellsonah2019/cs441_t6/blob/main/basic/images/node3_log.PNG)
 
 
     ### Kill Protocol

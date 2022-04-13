@@ -209,6 +209,3 @@ while True:
         received_message[2:4] = [char for char in other_router_nic['0x11']]
         received_message = ''.join(received_message)      
         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
-
-    
-

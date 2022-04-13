@@ -230,7 +230,7 @@
     ```
 
     d. A node3.log log file would be created in the basic folder
-    ![This is an image](https://github.com/wellsonah2019/cs441_t6/tree/main/images/node3_log.PNG)
+    ![[alt text]](/images/node3_log.PNG)
 
 
     ### Kill Protocol

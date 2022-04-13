@@ -19,7 +19,7 @@
     python router-nic2.py
     ```
     ### Ping Protocol Example (Node 1 Ping Node 3)
-    Node 1 Console
+    a. Input 0 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
     [Node 1]
     Please select what protocol you would like to use:
@@ -29,28 +29,19 @@
     3. Simple Messaging
     5. ARP Poisoning
     0
+    ```
+    
+    a. Insert the destination (Node 3's IP address) and press Enter
+    ```
     Please insert the destination: 0x2B
-    Please insert the message you want to send: hello node2
-    0.163626
-    Reply from 0x2B
-    -----------04/07/2022, 19:09:31-----------
-
-    The packet received:
-    Source MAC address: R1, Destination MAC address: N1
-
-    Source IP address: 0x2B, Destination IP address: 0x1A
-
-    Protocol: Ping
-
-    Data Length: 11
-
-    Message: hello node2
-
-    Approximate round trip in ms: 163.63
-    ----------------------------------
+    ```
+    
+    b. Insert the message you want to send to node 3 and press Enter
+    ```
+    Please insert the message you want to send: hello node3
     ```
 
-    Node 3 Console
+    Node 3 Console (Successful Ping from Node 1)
     ```
     ----------- [19:09:31] -----------
 
@@ -66,6 +57,26 @@
     Message: hello node2
     ----------------------------------
     Ping successful:  129.441
+    ```
+    
+    Node 1 Console (Reply from Node 3)
+    ```
+     Reply from 0x2B
+    -----------04/07/2022, 19:09:31-----------
+
+    The packet received:
+    Source MAC address: R1, Destination MAC address: N1
+
+    Source IP address: 0x2B, Destination IP address: 0x1A
+
+    Protocol: Ping
+
+    Data Length: 11
+
+    Message: hello node2
+
+    Approximate round trip in ms: 163.63
+    ----------------------------------
     ```
 
     ### Log Protocol

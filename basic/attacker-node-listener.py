@@ -19,8 +19,8 @@ extProc = sp.Popen(['python','attacker-node.py']) # runs myPyScript.py
 
 
 status = sp.Popen.poll(extProc) # status should be 'None'
-IP = '0x3A'
-MAC = 'N9'
+IP = '0x2B'
+MAC = 'N3'
 
 local_arp_table = json.loads(open('arp-table-attacker.json', 'r').read())
 
@@ -89,7 +89,7 @@ def wrap_packet_tcp(
         data_length = '0' + data_length
     elif len(data_length) == 1:
         data_length = '00' + data_length
-
+    print(dest_ip)
     if dest_ip in local_arp_table:
         print("dest ip in local arp table")
         destination_mac = local_arp_table[dest_ip] 

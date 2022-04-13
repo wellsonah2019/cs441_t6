@@ -5,8 +5,8 @@ import json
 from post import post_exploit_state
 from postexploit import poste
 
-IP = '0x3A'
-MAC = 'N9'
+IP = '0x2B'
+MAC = 'N3'
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server.bind(("localhost", 8066))

@@ -58,6 +58,7 @@ def wrap_packet_tcp(
     elif len(data_length) == 1:
         data_length = '00' + data_length
 
+    print(dest_ip)
     if dest_ip in local_arp_table:
         print("dest ip in local arp table")
         destination_mac = local_arp_table[dest_ip] 
@@ -284,7 +285,7 @@ while True:
                 # poste.setseq2(int(seq2)+data_length)
                 if str(special).strip() == '69':
                     # attacker send back ACK here
-                    to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=ack, ack=int(seq) + len(message), special=420, source_ip="0x2A", source_mac="N2")
+                    to_send = wrap_packet_tcp("0x2B", "6", "ACK", seq=ack, ack=int(seq) + len(message), special=420, source_ip="0x2A", source_mac="N2")
                     send_local(to_send)
                     poste.setseq2((int(poste.getseq2()) + 1))
                 pass

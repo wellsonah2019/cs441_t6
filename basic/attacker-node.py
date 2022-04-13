@@ -195,10 +195,9 @@ while True:
     elif protocol == str(6):
         if post_exploit_state.getstate() != "0":
             msg = input("Enter message please: ")
-            seq3 = poste.getseq3()
-            ack3 = poste.getack3()
+            seq2 = poste.getseq2()
+            ack2 = poste.getack2()
             length = len(msg)
-            to_send = wrap_packet_tcp("0x2A", "6", "ACK", message=msg, ack=int(ack3)+length, seq=int(seq3), special=69)
-            poste.setack2(seq3)
-            poste.setseq2(int(ack3)+length)
+            to_send = wrap_packet_tcp("0x2A", "6", "ACK", message=msg, ack=int(seq2), seq=int(ack2), special=69)
+            poste.setseq2(int(ack2) + length)
             send_local(to_send)

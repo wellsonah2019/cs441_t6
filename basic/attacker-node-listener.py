@@ -17,6 +17,7 @@ post_exploit_state.resetstate()
 
 extProc = sp.Popen(['python','attacker-node.py']) # runs myPyScript.py 
 
+
 status = sp.Popen.poll(extProc) # status should be 'None'
 IP = '0x3A'
 MAC = 'N9'
@@ -26,6 +27,10 @@ local_arp_table = json.loads(open('arp-table-attacker.json', 'r').read())
 # cable = ("localhost", 8200) 
 node2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 node2.bind(("localhost", 8006))
+
+def send_local(packet):
+  node2.sendto(bytes(packet, "utf-8"), ("localhost", 8002))
+  node2.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
 
 def reply_ping(packet):
     node2.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
@@ -205,10 +210,17 @@ while True:
         post_exploit_state.changestate("1")
         # print(post_exploit_state)
     
+    
     if post_exploit_state.getstate() != "0":
         # ack2 = poste.getack2()
         # ack2 = int(ack2) + data_length
         # # update seq 2 and ack 2
         # seq2 = poste.getseq2()
         # poste.setseq2(int(seq2)+data_length)
+        if str(special).strip() == '69':
+            # attacker send back ACK here
+            to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=ack, ack=int(seq) + len(message), special=420, source_ip="0x2B", source_mac="N3")
+            send_local(to_send)
+            poste.setack2((int(poste.getack2()) + 1))
         pass
+

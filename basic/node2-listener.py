@@ -7,6 +7,9 @@ import json
 from time import sleep
 # from collections.abc import Mapping
 # import pickle
+from post import post_exploit_state
+from postexploit import poste
+
 
 extProc = sp.Popen(['python','node2.py']) # runs myPyScript.py 
 
@@ -24,16 +27,23 @@ def reply_ping(packet):
     node2.sendto(bytes(packet, "utf-8"), ("localhost", 8102))
     node2.sendto(bytes(packet, "utf-8"), ("localhost", 8033))
 
+def send_local(packet):
+    node2.sendto(bytes(packet, "utf-8"), ("localhost", 8003))
+    node2.sendto(bytes(packet, "utf-8"), ("localhost", 8004)) # Packet Sniffer
+    node2.sendto(bytes(packet, "utf-8"), ("localhost", 8006)) # attacker
+
+
+
 def wrap_packet_tcp(
     dest_ip, protocol, ctl=None, message="", 
-    seq = 20, ack = None, special = 1
+    seq = 20, ack = None, special = 1, source_ip=IP, source_mac=MAC
 ):
     # special is to indicate the step of the attack, starting from 1
     ethernet_header = ""
     IP_header = ""
-    source_ip = IP
+    source_ip = source_ip
     IP_header = IP_header + source_ip + dest_ip
-    source_mac = MAC
+    source_mac = source_mac
     protocol = protocol
     data = message
     data_length = str(len(message))
@@ -49,6 +59,7 @@ def wrap_packet_tcp(
         data_length = '00' + data_length
 
     if dest_ip in local_arp_table:
+        print("dest ip in local arp table")
         destination_mac = local_arp_table[dest_ip] 
     else:
         destination_mac = 'R2'
@@ -260,6 +271,19 @@ while True:
                 # print("Step 5 of TCP handshake done!")
             # NOTE step 3 of attack
             elif str(special).strip() == "3":
+                pass
+
+            if post_exploit_state.getstate() != "0":
+                # ack2 = poste.getack2()
+                # ack2 = int(ack2) + data_length
+                # # update seq 2 and ack 2
+                # seq2 = poste.getseq2()
+                # poste.setseq2(int(seq2)+data_length)
+                if str(special).strip() == '69':
+                    # attacker send back ACK here
+                    to_send = wrap_packet_tcp("0x2A", "6", "ACK", seq=ack, ack=int(seq) + len(message), special=420, source_ip="0x2A", source_mac="N2")
+                    send_local(to_send)
+                    poste.setseq2((int(poste.getseq2()) + 1))
                 pass
 
     elif destination_ip != IP and MAC == destination_mac:

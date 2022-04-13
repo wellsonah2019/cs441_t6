@@ -18,7 +18,7 @@
     python router-nic1.py
     python router-nic2.py
     ```
-    ### Ping Protocol Example (Node 1 Ping Node 3)
+    ### Ping Protocol (Node 1 Ping Node 3 Example)
     **Note: Ping Protocol works for all 3 nodes and router**  
     a. Input 0 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
@@ -205,7 +205,7 @@
     CHANGING MAC ADDRESS TO R1...
     ```
 
-    ### Log Protocol (Node 1 to Node 3 Log Protocol)
+    ### Log Protocol (Node 1 to Node 3 Log Protocol Example)
     **Note: Log Protocol works for all 3 nodes and router** 
     a. Input 1 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
@@ -316,7 +316,7 @@
     ```
 
 
-    ### Kill Protocol (Node 1 Kill Node 2)
+    ### Kill Protocol (Node 1 Kill Node 2 Example)
     **Note: Kill Protocol works for all 3 nodes and router**  
     a. Input 2 in the console where node1-listener.py is run and press Enter to choose Kill Protocol
     ```
@@ -418,8 +418,113 @@
     CHANGING MAC ADDRESS TO N2...
     IP SPOOF GO HERE
     ```
+
+    ### Simple Messaging (Node 2 Sends Simple Messaging to Node 1 Example)
+    **Note: Simple Messaging works for all 3 nodes and router**  
+    a. Input 3 in the console where node1-listener.py is run and press Enter to choose Simple Messaging Protocol
+    ```
+    [Node 2]
+    Please select what protocol you would like to use:
+    0. Ping Protocol
+    1. Log Protocol
+    2. Kill Protocol
+    3. Simple Messaging
+    5. ARP Poisoning
+    6. TCP Connection
+    7. IP SPOOFING
+    3
+    ```
     
-    ### Simple Messaging
+    b. Insert the destination (Node 1's IP address) and press Enter
+    ```
+    Please insert the destination: 0x1A
+    ```
+    
+    c. Insert the message you want to send to node 1 and press Enter
+    ```
+    Please insert the message you want to send: good morning node 1!
+    ```
+
+    Node 1 Console
+    ```
+    ----------- [15:22:56] -----------
+
+    The packet received:
+    Source MAC address: R1, Destination MAC address: N1
+
+    Source IP address: 0x2A, Destination IP address: 0x1A
+
+    Protocol: Simple Messaging
+
+    Data Length: 020
+
+    Message: good morning node 1!
+    ----------------------------------
+    ```
+
+    (This part not confirmed)  
+    Node 3 Console
+    ```
+    ----------- [15:22:56] -----------
+
+    The packet received:
+    Source MAC address: N2, Destination MAC address: R2
+
+    Source IP address: 0x2A, Destination IP address: 0x1A
+
+    Protocol: 3
+
+    Data Length: 20
+
+    Message: good morning node 1!
+
+    PACKET NOT FOR ME. DROPPING NOW...
+    ----------------------------------
+    ```
+    Router 2 Console
+    ```
+    The packed received:
+    Source MAC address: N2, Destination MAC address: R2
+
+    Source IP address: 0x2A, Destination IP address: 0x1A
+
+    Protocl: 3
+
+    Data Length: 20
+
+    Message: good morning node 1!
+
+    PACKET NOT FOR ME.
+    Packet received for destination outside network...
+    Forwarding to router-nic1...
+    CURRENT SOURCE MAC ADDRESS: N2
+    CURRENT DESTINATION MAC ADDRESS: R2
+    CHANGING SOURCE MAC ADDRESS TO R2...
+    CHANGING MAC ADDRESS TO R1...
+    ```
+
+    Router 1 Console
+    ```
+    The packed received:
+    Source MAC address: R2, Destination MAC address: R1
+
+    Source IP address: 0x2A, Destination IP address: 0x1A
+
+    Protocl: 3
+
+    Data Length: 20
+
+    Message: good morning node 1!
+
+    PACKET NOT FOR ME.
+    Packet received for destination current network...
+    Forwading to current network...
+    CURRENT SOURCE MAC ADDRESS: R2
+    CURRENT DESTINATION MAC ADDRESS: R1
+    CHANGING SOURCE MAC ADDRESS TO R1...
+    CHANGING MAC ADDRESS TO N1...
+    received from outside network -- will pass to cable
+    ```
     
     ### IP Filter/Firewall
     

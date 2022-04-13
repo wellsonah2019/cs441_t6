@@ -189,11 +189,13 @@ while True:
         if source_ip[2] != '2':
             if protocol == 0:
                 if ping_type == 'rep':
-                    reply_ping(received_message)
+                    # reply_ping(received_message)
                     if destination_ip[3] == 'A':
                         print("NODE 2 SENT A PING PACKET")
+                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8022))
                         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8003))
                     elif destination_ip[3] == 'B':
+                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8033))
                         server.sendto(bytes(received_message, "utf-8"), ("localhost", 8002))
                 else:
                     send_local(received_message)

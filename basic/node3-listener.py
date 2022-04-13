@@ -257,9 +257,11 @@ while True:
                 total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
                 print("Ping successful: ", total.total_seconds() * 1000)
                 # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
-                reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
                 if ip_source not in local_arp_table:
                     node3.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8002))
+                    node3.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8102))
+                else:
+                    reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
                 # print(message)
             elif protocol == 1:
                 print("-----------" + timestamp() + "-----------")

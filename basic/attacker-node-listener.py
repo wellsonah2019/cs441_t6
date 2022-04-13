@@ -10,6 +10,7 @@ import json
 # import pickle
 from post import post_exploit_state
 from time import sleep
+from postexploit import poste
 
 # ensure that post exploit state is reset to 0
 post_exploit_state.resetstate() 
@@ -53,7 +54,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     if dest_ip in local_arp_table:
         destination_mac = local_arp_table[dest_ip] 
     else:
-        destination_mac = 'R2'
+        destination_mac = 'N2'
     ethernet_header = ethernet_header + source_mac + destination_mac
     packet = ethernet_header + IP_header + ping_type + protocol + str(data_length) + data
     
@@ -203,3 +204,11 @@ while True:
         sleep(0.2)
         post_exploit_state.changestate("1")
         # print(post_exploit_state)
+    
+    if post_exploit_state.getstate() != "0":
+        # ack2 = poste.getack2()
+        # ack2 = int(ack2) + data_length
+        # # update seq 2 and ack 2
+        # seq2 = poste.getseq2()
+        # poste.setseq2(int(seq2)+data_length)
+        pass

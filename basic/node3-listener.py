@@ -8,6 +8,7 @@ import json
 # from collections.abc import Mapping
 # import pickle
 from time import sleep
+from post import post_exploit_state
 
 extProc = sp.Popen(['python','node3.py']) # runs myPyScript.py 
 
@@ -235,7 +236,7 @@ while True:
             # if is_tcp:
             #     print("is tcp")
 
-            if protocol == 3:
+            if protocol == 3 or protocol == 7:
                 print("-----------" + timestamp() + "-----------")
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
                 print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
@@ -257,6 +258,7 @@ while True:
                 print("Ping successful: ", total.total_seconds() * 1000)
                 # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
                 reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
+                node3.sendto(bytes(wrap_packet_ip(message, ip_source, str(protocol)), "utf-8"), ("localhost", 8002))
                 # print(message)
             elif protocol == 1:
                 print("-----------" + timestamp() + "-----------")
@@ -296,6 +298,7 @@ while True:
                     print("Failed to restart sender node...")
                     print("Please restart manually")
                     print()
+                
             elif str(protocol) == "6":
                 print("-----------" + timestamp() + "-----------")
                 print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
@@ -310,6 +313,8 @@ while True:
                 print("\nSeq: " + seq)
                 print("\nAck: " + ack)
                 print("\nMessage: " + message)    
+                if post_exploit_state.getstate() != "0":
+                    print("[!] Invalid TCP Packet, Packet has been dropped.") 
                 print("----------------------------------")
                 # NOTE step 2 of TCP connection
                 # print("special is ", special)

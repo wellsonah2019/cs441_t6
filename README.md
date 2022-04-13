@@ -1,7 +1,7 @@
 # How to Run the Project
 **Note: Please run this project in ubuntu console**
 ## 1. Basic Network Emulation
-1. Clone the project to ubuntu home
+1. Clone the project to ubuntu home -- git clone https://github.com/wellsonah2019/cs441_t6.git
 2. Open ubuntu console and install python-is-python3:
     ```
     sudo apt-get install python-is-python3 -y
@@ -11,15 +11,15 @@
     cd ~/cs441_t6/basic
     python node1-listener.py
     ```
-4. Run the other python files in separate ubuntu console:
+4. Run the other python files in separate ubuntu consoles:
     ```
     python node2-listener.py
     python node3-listener.py
-    python route-nic1.py
-    python route-nic2.py
+    python router-nic1.py
+    python router-nic2.py
     ```
     ### Ping Protocol Example (Node 1 Ping Node 3)
-    Node 1 Console
+    a. Input 0 in the console where node1-listener.py is run and press Enter to choose Ping Protocol
     ```
     [Node 1]
     Please select what protocol you would like to use:
@@ -29,10 +29,39 @@
     3. Simple Messaging
     5. ARP Poisoning
     0
+    ```
+    
+    a. Insert the destination (Node 3's IP address) and press Enter
+    ```
     Please insert the destination: 0x2B
-    Please insert the message you want to send: hello node2
-    0.163626
-    Reply from 0x2B
+    ```
+    
+    b. Insert the message you want to send to node 3 and press Enter
+    ```
+    Please insert the message you want to send: hello node3
+    ```
+
+    Node 3 Console (Successful Ping from Node 1)
+    ```
+    ----------- [19:09:31] -----------
+
+    The packet received:
+    Source MAC address: R2, Destination MAC address: N3
+
+    Source IP address: 0x1A, Destination IP address: 0x2B
+
+    Protocol: Ping
+
+    Data Length: 011
+
+    Message: hello node2
+    ----------------------------------
+    Ping successful:  129.441
+    ```
+    
+    Node 1 Console (Reply from Node 3)
+    ```
+     Reply from 0x2B
     -----------04/07/2022, 19:09:31-----------
 
     The packet received:
@@ -50,32 +79,16 @@
     ----------------------------------
     ```
 
-    Node 3 Console
-    ```
-    ----------- [19:09:31] -----------
-
-    The packet received:
-    Source MAC address: R2, Destination MAC address: N3
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocol: Ping
-
-    Data Length: 011
-
-    Message: hello node2
-    ----------------------------------
-    Ping successful:  129.441
-    ```
-
     ### Log Protocol
 
     ### Kill Protocol
 
     ### Simple Messaging
     
-## 2. IP Spoofing
+    ### IP Filter/Firewall
+    
+    ### IP Spoofing
 
-## 3. ARP Poisoning
+## 2. ARP Poisoning
 
-## 4. TCP Session Hijacking MITM
+## 3. TCP Session Hijacking MITM

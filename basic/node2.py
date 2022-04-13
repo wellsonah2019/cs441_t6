@@ -6,6 +6,8 @@ import json
 from post import post_exploit_state
 from postexploit import poste
 
+poste.resetall()
+
 IP = '0x2A'
 MAC = 'N2'
 
@@ -52,6 +54,31 @@ def wrap_packet_ip(message, dest_ip, protocol):
     ethernet_header = ""
     IP_header = ""
     source_ip = IP
+    IP_header = IP_header + source_ip + dest_ip
+    source_mac = MAC
+    protocol = protocol
+    data = message
+    data_length = str(len(message))
+
+    if len(data_length) == 2:
+        data_length = '0' + data_length
+    elif len(data_length) == 1:
+        data_length = '00' + data_length
+
+    if dest_ip in local_arp_table:
+        destination_mac = local_arp_table[dest_ip] 
+    else:
+        destination_mac = 'R2'
+    # print(destination_mac)
+    ethernet_header = ethernet_header + source_mac + destination_mac
+    packet = ethernet_header + IP_header + protocol + data_length + data
+    
+    return packet
+
+def wrap_packet_ip_spoof(message, dest_ip, protocol, source_ip):
+    ethernet_header = ""
+    IP_header = ""
+    source_ip = source_ip
     IP_header = IP_header + source_ip + dest_ip
     source_mac = MAC
     protocol = protocol
@@ -173,7 +200,7 @@ def wrap_packet_tcp_post(
     return json.dumps(packet)
 
 while True:
-    protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection \n")
+    protocol = input("[Node 2] \nPlease select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n6. TCP Connection \n7. IP SPOOFING\n")
     dest_ip = input("Please insert the destination: ")
     if protocol == str(3):
         message = input("Please insert the message you want to send: ")
@@ -182,6 +209,14 @@ while True:
             print("Message is too long")
             message = input("Please insert the message you want to send: ")
         send_local(wrap_packet_ip(message, dest_ip, protocol))
+    elif protocol == str(7):
+        source_ip = input("FAKE IP TO SPOOF: ")
+        message = input("Please insert the message you want to send: ")
+        while len(message) > 256:
+            print()
+            print("Message is too long")
+            message = input("Please insert the message you want to send: ")
+        send_local(wrap_packet_ip_spoof(message, dest_ip, protocol, source_ip))
     elif protocol == str(0):
         message = input("Please insert the message you want to send: ")
         while len(message) > 256:
@@ -248,10 +283,13 @@ while True:
             # input()
         else:
             msg = input("Enter message please: ")
-            seq3 = poste.getseq3()
-            length = len()
-            wrap_packet_tcp("0x2B", "6", "ACK", message=msg, )
-
+            seq2 = poste.getseq2()
+            ack2 = poste.getack2()
+            length = len(msg)
+            to_send = wrap_packet_tcp("0x2B", "6", "ACK", message=msg, ack=int(ack2), seq=int(seq2)+length, special=69)
+            poste.setseq3(int(ack2))
+            poste.setack3(int(seq2)+length)
+            send_local(to_send)
 
     elif protocol == str(2): 
         message = ''

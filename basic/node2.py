@@ -286,9 +286,8 @@ while True:
             seq2 = poste.getseq2()
             ack2 = poste.getack2()
             length = len(msg)
-            to_send = wrap_packet_tcp("0x2B", "6", "ACK", message=msg, ack=int(ack2), seq=int(seq2)+length, special=69)
-            poste.setseq3(int(ack2))
-            poste.setack3(int(seq2)+length)
+            to_send = wrap_packet_tcp("0x2B", "6", "ACK", message=msg, ack=int(ack2), seq=int(seq2), special=69)
+            poste.setseq2(int(seq2) + length)
             send_local(to_send)
 
     elif protocol == str(2): 

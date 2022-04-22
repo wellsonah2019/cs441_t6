@@ -152,8 +152,73 @@ while True:
         print("\nData Length: " + str(data_length))
         print("\nMessage: " + message)    
         print()
-        print("PACKET FOR 'ME'. DOING MITM ATTACK...")
+        print("PACKET FOR 'ME'.")
         print("----------------------------------")
+        print("WILL ACT NORMALLY FOR NOW...")
+        print()
+        print()
+
+        if protocol == 3 or protocol == 7:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Simple Messaging")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
+        elif protocol == 0:
+            end = datetime.now()
+            print(end)
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Ping")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
+            total = end - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f')
+            print("Ping successful: " + str(round(total.total_seconds() * 1000, 2)) + "ms")
+            # msg = "Reply from 0x2A: No lost packet, one way trip time: " + str(total.total_seconds() * 1000)
+            reply_ping(wrap_packet_ip(message, ip_source, str(protocol)))
+            print(message)
+        elif protocol == 1:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Log")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
+            log_protocol(ip_source, source_mac, message)
+        elif protocol == 2:
+            print("-----------" + timestamp() + "-----------")
+            print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+            print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+            print("\nProtocol: Kill")
+            print("\nData Length: " + str(data_length))
+            print("\nMessage: " + message)
+            print("----------------------------------")
+            print("Kill protocol has been given. Will exit now...")
+            sp.Popen.terminate(extProc)
+            sys.exit()
+        elif protocol == 5:
+            # POISON ARP HERE
+            message = message.split(' ')
+            my_mac = message[0]
+            fake_ip = message[-1]
+            local_arp_table[fake_ip] = my_mac
+            with open('arp-table-node1.json', 'w') as f:
+                f.write(json.dumps(local_arp_table))
+            local_arp_table = json.loads(open('arp-table-node1.json', 'r').read()) 
+            print("Noticed ARP table change. Restarting sender node...")
+            sp.Popen.terminate(extProc)
+            try:
+                extProc = sp.Popen(['python','node1.py']) # runs myPyScript.py
+                print("Sender node restarted.")
+            except:
+                print("Failed to restart sender node...")
+                print("Please restart manually")
+                print()
     else:
         print("-----------" + timestamp() + "-----------")
         print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))

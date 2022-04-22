@@ -205,7 +205,10 @@ while True:
             # print('received from outside network -- will pass to cable')
             # send_local(received_message)
         else:
-            print("But received locally -- therefore will not send")
+            if destination_mac == MAC and destination_ip[2] == '2':
+                send_local(received_message)
+            else:
+                print("But received locally -- therefore will not send")
     elif destination_ip[2] == '1':
         print("Packet received for destination outside network... \nForwarding to router-nic1...")
         print("CURRENT SOURCE MAC ADDRESS:", source_mac)

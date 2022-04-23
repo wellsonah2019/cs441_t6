@@ -164,7 +164,6 @@
     Successfully written to log file!
     ```
 
-    (This part is not confirmed)  
     Node 2 Console
     ```
     ----------- [14:46:34] -----------
@@ -287,7 +286,6 @@
     ----------------------------------
     ```
 
-    (This part not confirmed)  
     Node 3 Console
     ```
     ----------- [15:22:56] -----------
@@ -305,50 +303,6 @@
 
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
-    ```
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: N2, Destination MAC address: R2
-
-    Source IP address: 0x2A, Destination IP address: 0x1A
-
-    Protocl: 3
-
-    Data Length: 20
-
-    Message: good morning node 1!
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic1...
-    CURRENT SOURCE MAC ADDRESS: N2
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO R1...
-    ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: R2, Destination MAC address: R1
-
-    Source IP address: 0x2A, Destination IP address: 0x1A
-
-    Protocl: 3
-
-    Data Length: 20
-
-    Message: good morning node 1!
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R2
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO N1...
-    received from outside network -- will pass to cable
     ```
     
     ### IP Filter/Firewall (only for node3)

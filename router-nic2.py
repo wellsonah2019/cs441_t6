@@ -82,7 +82,6 @@ def wrap_packet_ip(message, dest_ip, protocol):
     return packet
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print('yes here')
 while True:
     received_message, addr = router1.recvfrom(1024)
     received_message = received_message.decode("utf-8")
@@ -99,7 +98,6 @@ while True:
         ping_type = received_message[12:15]
         protocol = received_message[15:16]
         data_length = int(received_message[16:19])
-        # print(data_length)
         end_pos = 19 + data_length
         message = received_message[19:end_pos]
         protocol = int(protocol)
@@ -107,17 +105,10 @@ while True:
     else:
         protocol = received_message[12:13]
         data_length = int(received_message[13:16])
-        # print(data_length)
         end_pos = 16 + data_length
         message = received_message[16:end_pos]
         protocol = int(protocol)
     
-    # protocol = received_message[12:13]
-    # data_length = received_message[13:16]
-    # protocol = int(protocol)
-    # message = received_message[16:]
-    print(destination_mac)
-    print(destination_ip)
     if IP != destination_ip or MAC != destination_mac:
         print("\nThe packed received:\n Source MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
         print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=source_ip, destination_ip=destination_ip))
@@ -179,45 +170,47 @@ while True:
             connected_to_me[fake_ip] = my_mac
             print("Current ARP Table:")
             print(connected_to_me)
-    elif destination_ip in connected_to_me:
-        print("Packet received for destination current network... \nForwading to current network...")
-        print("CURRENT SOURCE MAC ADDRESS:", source_mac)
-        print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
-        print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
-        print("CHANGING MAC ADDRESS TO {}...".format(connected_to_me[destination_ip]))
-        received_message = MAC + str(connected_to_me[destination_ip]) + received_message[4:]
-        if source_ip[2] != '2':
-            if protocol == 0:
-                if ping_type == 'rep':
-                    # reply_ping(received_message)
-                    if destination_ip[3] == 'A':
-                        print("NODE 2 SENT A PING PACKET")
-                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8022))
-                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8003))
-                    elif destination_ip[3] == 'B':
-                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8033))
-                        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8002))
+    
+    elif MAC == destination_mac:
+
+        if destination_ip in connected_to_me:
+            print("Packet received for destination current network... \nForwading to current network...")
+            print("CURRENT SOURCE MAC ADDRESS:", source_mac)
+            print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
+            print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
+            print("CHANGING MAC ADDRESS TO {}...".format(connected_to_me[destination_ip]))
+            received_message = MAC + str(connected_to_me[destination_ip]) + received_message[4:]
+            if source_ip[2] != '2':
+                if protocol == 0:
+                    if ping_type == 'rep':
+                        # reply_ping(received_message)
+                        if destination_ip[3] == 'A':
+                            server.sendto(bytes(received_message, "utf-8"), ("localhost", 8022))
+                            server.sendto(bytes(received_message, "utf-8"), ("localhost", 8003))
+                        elif destination_ip[3] == 'B':
+                            server.sendto(bytes(received_message, "utf-8"), ("localhost", 8033))
+                            server.sendto(bytes(received_message, "utf-8"), ("localhost", 8002))
+                    else:
+                        send_local(received_message)
                 else:
+                    print("IP SPOOF GO HERE")
                     send_local(received_message)
+                # print('received from outside network -- will pass to cable')
+                # send_local(received_message)
             else:
-                print("IP SPOOF GO HERE")
-                send_local(received_message)
-            # print('received from outside network -- will pass to cable')
-            # send_local(received_message)
-        else:
-            if destination_mac == MAC and destination_ip[2] == '2':
-                send_local(received_message)
-            else:
-                print("But received locally -- therefore will not send")
-    elif destination_ip[2] == '1':
-        print("Packet received for destination outside network... \nForwarding to router-nic1...")
-        print("CURRENT SOURCE MAC ADDRESS:", source_mac)
-        print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
-        print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
-        print("CHANGING MAC ADDRESS TO R1...")
-        received_message = [char for char in received_message]
-        received_message[0] = 'R'
-        received_message[1] = '2'
-        received_message[2:4] = [char for char in other_router_nic['0x11']]
-        received_message = ''.join(received_message)      
-        server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))
+                if destination_mac == MAC and destination_ip[2] == '2':
+                    send_local(received_message)
+                else:
+                    print("But received locally -- therefore will not send")
+        elif destination_ip[2] == '1':
+            print("Packet received for destination outside network... \nForwarding to router-nic1...")
+            print("CURRENT SOURCE MAC ADDRESS:", source_mac)
+            print("CURRENT DESTINATION MAC ADDRESS:", destination_mac)
+            print("CHANGING SOURCE MAC ADDRESS TO {}...".format(MAC))
+            print("CHANGING MAC ADDRESS TO R1...")
+            received_message = [char for char in received_message]
+            received_message[0] = 'R'
+            received_message[1] = '2'
+            received_message[2:4] = [char for char in other_router_nic['0x11']]
+            received_message = ''.join(received_message)      
+            server.sendto(bytes(received_message, "utf-8"), ("localhost", 8101))

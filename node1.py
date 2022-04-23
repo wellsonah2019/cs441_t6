@@ -97,8 +97,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
 while True:
     protocol = input("[Node 1] \n Please select what protocol you would like to use: \n 0. Ping Protocol \n 1. Log Protocol \n 2. Kill Protocol \n 3. Simple Messaging \n5. ARP Poisoning\n7. IP SPOOFING\n")
     dest_ip = input("Please insert the destination: ")
-    print(type(protocol))
-    print(type(dest_ip))
+    
     if protocol == str(3):
         print("IN NODE1 protocol 3 LINE 50")
         message = input("Please insert the message you want to send: ")
@@ -141,21 +140,21 @@ while True:
             data_length = int(received_message[16:19])
             end_pos = 19 + data_length
             message = received_message[19:end_pos]
-            if IP == destination_ip:
-                # print(end)
-                total = end - start
-                print(total.total_seconds())
-                print('Reply from ' + ip_source)
-                print("-----------" + date_time() + "-----------")
-                print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
-                print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
-                print("\nProtocol: Ping")
-                print("\nData Length: " + str(data_length))
-                print("\nMessage: " + message)
-                print("\nApproximate round trip in ms: " + str(round(total.total_seconds() * 1000, 2)))
-                print("----------------------------------")
-                print(message)
-                server.settimeout(None)
+            if MAC == destination_mac:
+                if IP == destination_ip:
+                    total = end - start
+                    print(total.total_seconds())
+                    print('Reply from ' + ip_source)
+                    print("-----------" + date_time() + "-----------")
+                    print("\nThe packet received:\nSource MAC address: {source_mac}, Destination MAC address: {destination_mac}".format(source_mac=source_mac, destination_mac=destination_mac))
+                    print("\nSource IP address: {ip_source}, Destination IP address: {destination_ip}".format(ip_source=ip_source, destination_ip=destination_ip))
+                    print("\nProtocol: Ping")
+                    print("\nData Length: " + str(data_length))
+                    print("\nMessage: " + message)
+                    print("\nApproximate round trip in ms: " + str(round(total.total_seconds() * 1000, 2)))
+                    print("----------------------------------")
+                    print(message)
+                    server.settimeout(None)
         except socket.timeout as e:
             print(e)
             print()

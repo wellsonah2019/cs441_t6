@@ -222,7 +222,6 @@
     Kill protocol has been given. Will exit now...
     jesst@DESKTOP-0PJ69ED:~/network-simulator/cs441_t6/basic$
     ```
-    (This part is not confirmed)  
     Node 3 Console
     ```
     ----------- [15:10:19] -----------

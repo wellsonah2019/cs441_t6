@@ -8,7 +8,7 @@
     ```
 3. Open ubuntu console and run the commands below:
     ```
-    cd ~/cs441_t6/basic
+    cd ~/cs441_t6
     python node1-listener.py
     ```
 4. Run the other python files in separate ubuntu consoles:
@@ -81,7 +81,6 @@
     ----------------------------------
     ```
 
-    (This part is not confirmed)  
     Node 3 Console
     ```
     ----------- [14:36:44] -----------
@@ -117,92 +116,6 @@
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
     packet received
-    ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    R1
-    0x1A
-
-    The packed received:
-    Source MAC address: R2, Destination MAC address: R1
-
-    Source IP address: 0x2B, Destination IP address: 0x1A
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R2
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO N1...
-    ```
-
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N3...
-    R2
-    0x1A
-
-    The packed received:
-    Source MAC address: N3, Destination MAC address: R2
-
-    Source IP address: 0x2B, Destination IP address: 0x1A
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic1...
-    CURRENT SOURCE MAC ADDRESS: N3
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO R1...
     ```
 
     ### Log Protocol (Node 1 to Node 3 Log Protocol Example)
@@ -251,7 +164,6 @@
     Successfully written to log file!
     ```
 
-    (This part is not confirmed)  
     Node 2 Console
     ```
     ----------- [14:46:34] -----------
@@ -271,50 +183,6 @@
     ----------------------------------
     packet received
     ```
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 1
-
-    Data Length: 57
-
-    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    ```
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 1
-
-    Data Length: 57
-
-    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N3...
-    IP SPOOF GO HERE
-    ```
-
 
     ### Kill Protocol (Node 1 Kill Node 2 Example)
     **Note: Kill Protocol works for all 3 nodes and router**  
@@ -354,7 +222,6 @@
     Kill protocol has been given. Will exit now...
     jesst@DESKTOP-0PJ69ED:~/network-simulator/cs441_t6/basic$
     ```
-    (This part is not confirmed)  
     Node 3 Console
     ```
     ----------- [15:10:19] -----------
@@ -373,51 +240,7 @@
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
     ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2A
-
-    Protocl: 2
-
-    Data Length: 0
-
-    Message:
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    ```
-
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2A
-
-    Protocl: 2
-
-    Data Length: 0
-
-    Message:
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N2...
-    IP SPOOF GO HERE
-    ```
+    
 
     ### Simple Messaging (Node 2 Sends Simple Messaging to Node 1 Example)
     **Note: Simple Messaging works for all 3 nodes and router**  
@@ -462,7 +285,6 @@
     ----------------------------------
     ```
 
-    (This part not confirmed)  
     Node 3 Console
     ```
     ----------- [15:22:56] -----------
@@ -481,55 +303,166 @@
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
     ```
-    Router 2 Console
+    
+    ### IP Filter/Firewall (only for node3)
+    
+    a. Input 4 in the console where node3-listener.py is run and press Enter to choose Configure Firewall
     ```
-    The packed received:
-    Source MAC address: N2, Destination MAC address: R2
-
-    Source IP address: 0x2A, Destination IP address: 0x1A
-
-    Protocl: 3
-
-    Data Length: 20
-
-    Message: good morning node 1!
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic1...
-    CURRENT SOURCE MAC ADDRESS: N2
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO R1...
-    ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: R2, Destination MAC address: R1
-
-    Source IP address: 0x2A, Destination IP address: 0x1A
-
-    Protocl: 3
-
-    Data Length: 20
-
-    Message: good morning node 1!
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R2
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO N1...
-    received from outside network -- will pass to cable
+    [Node 3]
+    Please select what protocol you would like to use:
+    0. Ping Protocol
+    1. Log Protocol
+    2. Kill Protocol
+    3. Simple Messaging
+    4. Configure Firewall
+    5. ARP Poisoning
+    6. TCP Connection
+    7. IP SPOOFING
+    4
     ```
     
-    ### IP Filter/Firewall
+    b. Input the IP to be blocked
+    
+    ```
+    Current firewall configuration:
+    Blocked IPs: []
+    Please enter the IP address to be blocked, or [exit]: 0x2A
+    ```
+    
+    c. 0x2A is now blocked.
     
     ### IP Spoofing
+    a. Input 7 in the console where node3-listener.py is run and press Enter to choose Simple Messaging Protocol
+    ```
+    [Node 3]
+    Please select what protocol you would like to use:
+    0. Ping Protocol
+    1. Log Protocol
+    2. Kill Protocol
+    3. Simple Messaging
+    4. Configure Firewall
+    5. ARP Poisoning
+    6. TCP Connection
+    7. IP SPOOFING
+    7
+    ```
+    
+    b.  Input the destination IP, fake IP to spoof, and the message
+    ```
+    Please insert the destination: 0x2A
+    FAKE IP TO SPOOF: 0x21
+    Please insert the message you want to send: hello
+    ```
+    c. Node 2 (0x2A) will now receive a packet from IP 0x21 (router's IP) and MAC N3 (Node3's MAC)
+    ```
+    ----------- [13:39:15] -----------
 
+    The packet received:
+    Source MAC address: N3, Destination MAC address: N2
+
+    Source IP address: 0x21, Destination IP address: 0x2A
+
+    Protocol: Simple Messaging
+
+    Data Length: 5
+
+    Message: hello
+    ----------------------------------
+    packet received
+    ```
+    
 ## 2. ARP Poisoning
-
+1. Input 5 in node2-listener.py to choose ARP Poisoning
+2. Input the destination IP and the fake IP
+    ```
+    5
+    Please insert the destination: 0x2B
+    Please insert your fake IP: 0x21
+    ```
+3. Node 3 (0x2B)'s ARP Table now has been modified (notice how 0x21 is pointing to N2 instead of R2)
+    ```
+    {   
+    "0x21": "N2", 
+    "0x2A": "N2", 
+    "0x2C": "N4"
+    }
+    ```
+    
 ## 3. TCP Session Hijacking MITM
+Note: this only works between node2-listener and node3-listener and attacker-node-listener needs to be run for hijacking
+1. In node2-listener.py, input 6 to choose TCP connection
+2. The TCP handshake and MITM hijacking will be done automatically
+3. To prove the attack is successful, attacker can send another TCP packet
+    a. In attacker-node-listener.py, input 6 to choose TCP Connection
+    b. Enter destination as 0x2A and input any arbitrary random message
+    ```
+    Please insert the destination: 0x2A
+    Enter message please: helllooo
+    ```
+    c. Node 2 will now accept the packet, thinking that it is from Node3 (with the correct SEQ and ACK, and the spoofed IP and MAC)
+    ```
+    The packet received:
+    Source MAC address: N3, Destination MAC address: N2
+
+    Source IP address: 0x2B, Destination IP address: 0x2A
+
+    Protocol: TCP
+
+    Data Length: 008
+
+    TCP Control Flag: ACK
+
+    Seq: 51
+
+    Ack: 22
+
+    Message: helllooo
+    ----------------------------------
+    0x2B
+    dest ip in local arp table
+    packet received
+    ```
+    d. Node 2 can also send TCP packets (by doing the same as step b. and c.) to Node 3, but Node 3 will drop the packet because the SEQ and ACK numbers are invalid
+    ```
+    The packet received:
+    Source MAC address: N2, Destination MAC address: N3
+
+    Source IP address: 0x2A, Destination IP address: 0x2B
+
+    Protocol: TCP
+
+    Data Length: 008
+
+    TCP Control Flag: ACK
+
+    Seq: 60
+
+    Ack: 51
+
+    Message: helloooo
+    [!] Invalid TCP Packet, Packet has been dropped.
+    ```
+    e. Attacker node, however, will accept this packet
+    
+    ```
+    The packet received:
+    Source MAC address: N2, Destination MAC address: N3
+
+    Source IP address: 0x2A, Destination IP address:
+
+    Protocol: TCP
+
+    Data Length: 008
+
+    TCP Control Flag: ACK
+
+    Seq: 60
+
+    Ack: 51
+
+    Message: helloooo
+    ----------------------------------
+    packet received
+    ```
+    
+

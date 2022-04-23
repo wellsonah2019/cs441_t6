@@ -8,7 +8,7 @@
     ```
 3. Open ubuntu console and run the commands below:
     ```
-    cd ~/cs441_t6/basic
+    cd ~/cs441_t6
     python node1-listener.py
     ```
 4. Run the other python files in separate ubuntu consoles:
@@ -81,7 +81,6 @@
     ----------------------------------
     ```
 
-    (This part is not confirmed)  
     Node 3 Console
     ```
     ----------- [14:36:44] -----------
@@ -117,92 +116,6 @@
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
     packet received
-    ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    R1
-    0x1A
-
-    The packed received:
-    Source MAC address: R2, Destination MAC address: R1
-
-    Source IP address: 0x2B, Destination IP address: 0x1A
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R2
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO N1...
-    ```
-
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N3...
-    R2
-    0x1A
-
-    The packed received:
-    Source MAC address: N3, Destination MAC address: R2
-
-    Source IP address: 0x2B, Destination IP address: 0x1A
-
-    Protocl: 0
-
-    Data Length: 11
-
-    Message: hello node3
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic1...
-    CURRENT SOURCE MAC ADDRESS: N3
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO R1...
     ```
 
     ### Log Protocol (Node 1 to Node 3 Log Protocol Example)
@@ -271,50 +184,6 @@
     ----------------------------------
     packet received
     ```
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 1
-
-    Data Length: 57
-
-    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    ```
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2B
-
-    Protocl: 1
-
-    Data Length: 57
-
-    Message: 04/13/2022, 14:46:34 Hi node 3, I'm node 1 (Log Protocol)
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N3...
-    IP SPOOF GO HERE
-    ```
-
 
     ### Kill Protocol (Node 1 Kill Node 2 Example)
     **Note: Kill Protocol works for all 3 nodes and router**  
@@ -373,51 +242,7 @@
     PACKET NOT FOR ME. DROPPING NOW...
     ----------------------------------
     ```
-
-    Router 1 Console
-    ```
-    The packed received:
-    Source MAC address: N1, Destination MAC address: R1
-
-    Source IP address: 0x1A, Destination IP address: 0x2A
-
-    Protocl: 2
-
-    Data Length: 0
-
-    Message:
-
-    PACKET NOT FOR ME.
-    Packet received for destination outside network...
-    Forwarding to router-nic2...
-    CURRENT SOURCE MAC ADDRESS: N1
-    CURRENT DESTINATION MAC ADDRESS: R1
-    CHANGING SOURCE MAC ADDRESS TO R1...
-    CHANGING MAC ADDRESS TO R2...
-    ```
-
-    Router 2 Console
-    ```
-    The packed received:
-    Source MAC address: R1, Destination MAC address: R2
-
-    Source IP address: 0x1A, Destination IP address: 0x2A
-
-    Protocl: 2
-
-    Data Length: 0
-
-    Message:
-
-    PACKET NOT FOR ME.
-    Packet received for destination current network...
-    Forwading to current network...
-    CURRENT SOURCE MAC ADDRESS: R1
-    CURRENT DESTINATION MAC ADDRESS: R2
-    CHANGING SOURCE MAC ADDRESS TO R2...
-    CHANGING MAC ADDRESS TO N2...
-    IP SPOOF GO HERE
-    ```
+    
 
     ### Simple Messaging (Node 2 Sends Simple Messaging to Node 1 Example)
     **Note: Simple Messaging works for all 3 nodes and router**  

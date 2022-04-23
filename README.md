@@ -351,7 +351,7 @@
     ```
     Please insert the destination: 0x2A
     FAKE IP TO SPOOF: 0x21
-    Please insert the message you want to send: dkjsdfjklkjsdf
+    Please insert the message you want to send: hello
     ```
     c. Node 2 (0x2A) will now receive a packet from IP 0x21 (router's IP) and MAC N3 (Node3's MAC)
     ```

@@ -51,7 +51,7 @@ def wrap_packet_ping(message, dest_ip, protocol):
     if dest_ip in connected_to_me:
         destination_mac = connected_to_me[dest_ip] 
     else:
-        destination_mac = 'R2'
+        destination_mac = 'R1'
     ethernet_header = ethernet_header + source_mac + destination_mac
     packet = ethernet_header + IP_header + ping_type + protocol + str(data_length) + data
     
@@ -75,7 +75,7 @@ def wrap_packet_ip(message, dest_ip, protocol):
     if dest_ip in connected_to_me:
         destination_mac = connected_to_me[dest_ip] 
     else:
-        destination_mac = 'R2'
+        destination_mac = 'R1'
     ethernet_header = ethernet_header + source_mac + destination_mac
     packet = ethernet_header + IP_header + protocol + data_length + data
     

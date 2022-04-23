@@ -29,8 +29,6 @@ router1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 router1.bind(("localhost", 8101))
 
 server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print('yes here')
-
 
 def wrap_packet_ping(message, dest_ip, protocol):
     ethernet_header = ""

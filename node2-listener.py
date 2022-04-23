@@ -112,7 +112,6 @@ def wrap_packet_ip(message, dest_ip, protocol):
     packet = ethernet_header + IP_header + ping_type + protocol + str(data_length) + data
     
     return packet
-print('packet received before while loop')
 
 
 
